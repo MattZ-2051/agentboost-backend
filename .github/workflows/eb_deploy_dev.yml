@@ -39,7 +39,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: agentboost-ai
           environment_name: env-dev
-          version_label: agentboost-ai-version-4
+          version_label: ${{github.sha}}
           region: us-west-2
           use_existing_version_if_available: true
           deployment_package: deploy.zip
