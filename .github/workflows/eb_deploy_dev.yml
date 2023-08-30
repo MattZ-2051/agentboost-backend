@@ -23,6 +23,7 @@ jobs:
 
       - name: npm install, build
         run: |
+          npm i source-map-support
           npm ci
           npm run build
         env:
@@ -32,13 +33,13 @@ jobs:
         run: zip -r deploy.zip .
 
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v18
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: agentboost-ai
           environment_name: env-dev
-          version_label: ${{github.sha}}
-          region: us-east-1
+          version_label: agentboost-ai-version-3
+          region: us-west-2
           use_existing_version_if_available: true
           deployment_package: deploy.zip
