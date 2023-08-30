@@ -1,0 +1,20 @@
+export type RealtyMoleData = {
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  formattedAddress: string;
+  bedrooms: number;
+  county: string;
+  legalDescription: string;
+  squareFootage: number;
+  subdivision: string;
+  yearBuilt: number;
+  bathrooms: number;
+  lotSize: number;
+  propertyType: string;
+  lastSaleDate: string;
+  features: JSON;
+  propertyTaxes?: JSON;
+  owner?: JSON;
+};

@@ -1,0 +1,14 @@
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+dist
+.git
+.github
+.vscode
+.gitignore
+.github/*
+docker-compose.yml
+./platform/*
+.env*
+.secrets
