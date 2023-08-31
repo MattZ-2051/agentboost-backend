@@ -1,5 +1,4 @@
 import { IsNumber, IsNotEmpty, IsString, IsJSON } from 'class-validator';
-import { User } from '../../user/user.entity';
 
 export class GetPropertyDescriptionDto {
   @IsNotEmpty()
@@ -9,10 +8,6 @@ export class GetPropertyDescriptionDto {
   @IsNotEmpty()
   @IsString()
   keyInfo: string;
-
-  @IsNotEmpty()
-  @IsString()
-  agentProfile: string;
 }
 
 export class CreateListingDto {

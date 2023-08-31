@@ -29,11 +29,9 @@ export class ListingsController {
   }> {
     const address = body.address;
     const keyInfo = body.keyInfo;
-    const agentProfile = body.agentProfile;
     const data = await this.listingsService.getPropertyDescription({
       address,
       keyInfo,
-      agentProfile,
     });
 
     return data;

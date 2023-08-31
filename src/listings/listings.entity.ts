@@ -18,6 +18,9 @@ export class Listing {
   @Column({ nullable: false, type: 'text' })
   propertyDescription: string;
 
+  @Column({ nullable: false, type: 'text' })
+  propertyInsight: string;
+
   @Column({ nullable: false, type: 'varchar' })
   city: string;
 

@@ -24,7 +24,6 @@ export class ListingsService {
   async getPropertyDescription({
     address,
     keyInfo,
-    agentProfile,
   }: GetPropertyDescriptionDto): Promise<{
     choices: ChatCompletionResponseMessage[];
     realtyMoleData: RealtyMoleData;
@@ -38,7 +37,6 @@ export class ListingsService {
         address,
         keyInfo,
         realtyMoleData,
-        agentProfile,
       });
       if (gptResponse.choices.length > 0) {
         return {
@@ -50,55 +48,89 @@ export class ListingsService {
   }
 
   async createListing(dto: CreateListingDto): Promise<Listing> {
-    const listingExists = await this.listingRepo.findOneBy({
-      address: dto.address,
-    });
+    const gptResponse = await this.gptService.generatePropertyInsightForListing(
+      {
+        subdivision: dto.subdivision || 'raintree',
+        avgDays: '23',
+        pricePerFoot: '$500',
+        soldPrice: '$200,000',
+        avgLotSize: '.30',
+        appreciationAvg: '10%',
+        lotSize: '.23',
+      },
+    );
 
-    const listingCreator = await this.usersService.findOne('id', dto.userId);
+    if (gptResponse.choices.length > 0) {
+      const propertyInsight = gptResponse.choices[0].message.content;
+      const listingExists = await this.listingRepo.findOne({
+        where: {
+          formattedAddress: dto.formattedAddress,
+        },
+        relations: ['user'],
+      });
 
-    let listing;
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.startTransaction();
+      const listingCreator = await this.usersService.findOne('id', dto.userId);
 
-    if (listingExists) {
-      listing = await this.listingRepo.update(
-        { id: listingExists.id },
-        { ...dto, user: listingCreator },
-      );
+      let listing;
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.startTransaction();
 
-      if (listing.affected === 1) {
-        const updatedListing = await this.listingRepo.findOneBy({
-          address: dto.address,
+      if (listingExists) {
+        delete dto.userId;
+
+        listing = await this.listingRepo.update(
+          { id: listingExists.id },
+          {
+            ...dto,
+            user: listingCreator,
+            propertyInsight: propertyInsight as unknown as string,
+          },
+        );
+
+        if (listing.affected === 1) {
+          const updatedListing = await this.listingRepo.findOne({
+            where: {
+              formattedAddress: dto.formattedAddress,
+            },
+          });
+
+          try {
+            await queryRunner.manager.save(updatedListing);
+            await queryRunner.commitTransaction();
+            return updatedListing;
+          } catch (err) {
+            // since we have errors lets rollback the changes we made
+            await queryRunner.rollbackTransaction();
+            throw new HttpException('error updating listings', 500);
+          } finally {
+            // you need to release a queryRunner which was manually instantiated
+            await queryRunner.release();
+          }
+        } else {
+          throw new HttpException('Error logging user out', 500);
+        }
+      } else {
+        listing = await this.listingRepo.create({
+          ...dto,
+          user: listingCreator,
+          propertyInsight: propertyInsight as unknown as string,
         });
+
         try {
-          await queryRunner.manager.save(updatedListing);
+          await queryRunner.manager.save(listing);
           await queryRunner.commitTransaction();
-          return updatedListing;
+          return listing;
         } catch (err) {
           // since we have errors lets rollback the changes we made
           await queryRunner.rollbackTransaction();
-          throw new HttpException('error updating listings', 500);
+          throw new HttpException(
+            'error creating listing, missing fields',
+            400,
+          );
         } finally {
           // you need to release a queryRunner which was manually instantiated
           await queryRunner.release();
         }
-      } else {
-        throw new HttpException('Error logging user out', 500);
-      }
-    } else {
-      listing = await this.listingRepo.create({ ...dto, user: listingCreator });
-
-      try {
-        await queryRunner.manager.save(listing);
-        await queryRunner.commitTransaction();
-        return listing;
-      } catch (err) {
-        // since we have errors lets rollback the changes we made
-        await queryRunner.rollbackTransaction();
-        throw new HttpException('error creating listing, missing fields', 400);
-      } finally {
-        // you need to release a queryRunner which was manually instantiated
-        await queryRunner.release();
       }
     }
   }
