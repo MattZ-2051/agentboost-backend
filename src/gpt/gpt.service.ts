@@ -30,6 +30,7 @@ export class GptService {
       });
       return response.data;
     } catch (err) {
+      console.log('gpt error', err.response);
       throw new HttpException('error with ai', 500);
     }
   }

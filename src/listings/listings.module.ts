@@ -5,9 +5,15 @@ import { Listing } from './listings.entity';
 import { RealtyModule } from 'src/realty/realty.module';
 import { GptModule } from 'src/gpt/gpt.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '..//user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Listing]), RealtyModule, GptModule],
+  imports: [
+    TypeOrmModule.forFeature([Listing]),
+    RealtyModule,
+    GptModule,
+    UserModule,
+  ],
   controllers: [ListingsController],
   providers: [ListingsService],
 })

@@ -24,7 +24,7 @@ export class User {
   @Column({ nullable: true, default: '', type: 'varchar' })
   rtHash: string;
 
-  @OneToMany(() => Listing, (listing) => listing.user)
+  @OneToMany(() => Listing, (listing) => listing.user, { nullable: true })
   listings: Listing[];
 
   constructor(partial: Partial<User>) {

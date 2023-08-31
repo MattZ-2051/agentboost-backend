@@ -8,11 +8,13 @@ import { CreateListingDto } from './dto/listings.dto';
 import { Listing } from './listings.entity';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { RealtyMoleData } from 'src/realty/types/realty.types';
+import { UserService } from '..//user/user.service';
 
 @Injectable()
 export class ListingsService {
   constructor(
     private readonly gptService: GptService,
+    private readonly usersService: UserService,
     private readonly realtyService: RealtyService,
     private readonly dataSource: DataSource,
     @InjectRepository(Listing)
@@ -52,6 +54,8 @@ export class ListingsService {
       address: dto.address,
     });
 
+    const listingCreator = await this.usersService.findOne('id', dto.userId);
+
     let listing;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
@@ -59,7 +63,7 @@ export class ListingsService {
     if (listingExists) {
       listing = await this.listingRepo.update(
         { id: listingExists.id },
-        { ...dto },
+        { ...dto, user: listingCreator },
       );
 
       if (listing.affected === 1) {
@@ -82,7 +86,7 @@ export class ListingsService {
         throw new HttpException('Error logging user out', 500);
       }
     } else {
-      listing = await this.listingRepo.create(dto);
+      listing = await this.listingRepo.create({ ...dto, user: listingCreator });
 
       try {
         await queryRunner.manager.save(listing);

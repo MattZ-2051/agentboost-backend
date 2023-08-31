@@ -1,5 +1,11 @@
 import { User } from '../user/user.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Listing {
@@ -63,6 +69,6 @@ export class Listing {
   @Column({ nullable: true, default: '{}', type: 'json' })
   owner: JSON;
 
-  @ManyToMany(() => User, (user) => user.listings)
+  @ManyToOne(() => User, (user) => user.listings, { nullable: false })
   user: User;
 }
