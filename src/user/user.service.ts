@@ -18,7 +18,10 @@ export class UserService {
   }
 
   async findOne(key: string, val: string | number): Promise<User> {
-    return this.userRepo.findOneBy({ [key]: val });
+    return this.userRepo.findOne({
+      where: { [key]: val },
+      relations: ['listings'],
+    });
   }
 
   getUsers(): string {

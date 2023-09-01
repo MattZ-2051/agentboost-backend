@@ -75,3 +75,15 @@ export class Listing {
   @ManyToOne(() => User, (user) => user.listings, { nullable: false })
   user: User;
 }
+
+// @Entity()
+// export class Listing {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+
+//   @Column({ nullable: false, unique: fakse, type: 'varchar' })
+//   img: string;
+
+//   @Column({ nullable: false, unique: fakse, type: 'varchar' })
+//   img: string;
+// }

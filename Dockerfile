@@ -1,29 +1,32 @@
-ARG IMAGE=node:16.13-alpine
+# build stage
+FROM node:18-alpine AS build
 
-#COMMON
-FROM $IMAGE as builder
-WORKDIR /app
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+
 COPY . .
-RUN npm i
 
-#DEVELOPMENT
-FROM builder as dev
-CMD [""]
-
-#PROD MIDDLE STEP
-FROM builder as prod-build
 RUN npm run build
-RUN npm prune --production
 
-#PROD
-FROM $IMAGE as prod
-COPY --chown=node:node --from=prod-build /app/dist /app/dist
-COPY --chown=node:node --from=prod-build /app/node_modules /app/node_modules
-COPY --chown=node:node --from=prod-build /app/.env /app/dist/.env
+# prod stage
 
-ENV NODE_ENV=production
-ENTRYPOINT ["node", "./main.js"]
-WORKDIR /app/dist
-CMD [""]
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+FROM node:18-alpine
 
-USER node
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/src/app/dist ./dist
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+RUN rm package*.json
+
+EXPOSE 5001
+
+CMD ["node", "dist/main.js"]
