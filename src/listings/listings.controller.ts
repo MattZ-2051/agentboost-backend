@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  UseGuards,
-  Query,
-  Post,
-  Body,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, Post, Body, Param } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { AtGuard } from 'src/auth/guards/auth.jwt-auth.guard';
 import { GetPropertyDescriptionDto } from './dto/listings.dto';
