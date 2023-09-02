@@ -36,7 +36,7 @@ export class AuthController {
   @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
-  async refreshTokens(@Request() req): Promise<Tokens> {
+  async refreshTokens(): Promise<Tokens> {
     const userId = 1;
     const refreshToken = '';
     return await this.authService.refreshTokens(userId, refreshToken);
