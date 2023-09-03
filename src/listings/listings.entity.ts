@@ -66,6 +66,9 @@ export class Listing {
   @Column({ nullable: true, default: '{}', type: 'json' })
   owner: JSON;
 
+  @Column({ nullable: true, default: '[]', type: 'jsonb' })
+  cma: JSON;
+
   @ManyToOne(() => User, (user) => user.listings, { nullable: false })
   user: User;
 }

@@ -4,11 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GetPropertyDescriptionDto } from './dto/listings.dto';
 import { GptService } from 'src/gpt/gpt.service';
 import { RealtyService } from 'src/realty/realty.service';
-import { CreateListingDto } from './dto/listings.dto';
+import { CreateListingDto, CreateCmaDto } from './dto/listings.dto';
 import { Listing } from './listings.entity';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { RealtyMoleData } from 'src/realty/types/realty.types';
 import { UserService } from '..//user/user.service';
+import { SaleListing } from './types/listings.types';
 
 @Injectable()
 export class ListingsService {
@@ -44,6 +45,90 @@ export class ListingsService {
           realtyMoleData,
         };
       }
+    }
+  }
+
+  private _filterCma(
+    realtyMoleResponse: SaleListing[],
+    listing: Listing,
+  ): SaleListing[] {
+    const bedBoundary = {
+      max: listing.bedrooms + 1,
+      min: listing.bedrooms - 1,
+    };
+
+    const lotSizeBoundary = {
+      max: listing.lotSize + 0.2 * listing.lotSize,
+      min: listing.lotSize - 0.2 * listing.lotSize,
+    };
+
+    const squareFootageBoundary = {
+      max: listing.squareFootage + 0.15 * listing.squareFootage,
+      min: listing.squareFootage - 0.15 * listing.squareFootage,
+    };
+
+    const limits = {
+      bedBoundary,
+      lotSizeBoundary,
+      squareFootageBoundary,
+    };
+    const cma: SaleListing[] = [];
+
+    for (const item of realtyMoleResponse) {
+      if (
+        item.bedrooms >= limits.bedBoundary.min &&
+        item.bedrooms <= limits.bedBoundary.max &&
+        // modify value for lot size bounds
+        // item.lotSize >= limits.lotSizeBoundary.max &&
+        // item.lotSize <= limits.lotSizeBoundary.min &&
+        item.squareFootage >= limits.squareFootageBoundary.min &&
+        item.squareFootage <= limits.squareFootageBoundary.max
+      ) {
+        cma.push(item);
+      }
+    }
+
+    return cma;
+  }
+
+  async createCma(dto: CreateCmaDto, listingId: string): Promise<any> {
+    const realtyServiceDto = {
+      address: dto.address,
+      radius: dto.radius,
+      status: dto.status,
+    };
+    const realtyMoleResponse = await this.realtyService.getPropertyCma(
+      realtyServiceDto,
+    );
+
+    const listing = await this.listingRepo.findOneBy({
+      id: parseInt(listingId, 10),
+    });
+
+    if (listing) {
+      if (realtyMoleResponse) {
+        let cma = this._filterCma(realtyMoleResponse, listing);
+
+        console.log('length', realtyMoleResponse.length);
+        if (cma.length < 3) {
+          // const realtyMoleResponse = await this.realtyService.getPropertyCma({
+          //   address: dto.address,
+          //   radius: (dto.radius += 5),
+          //   status: dto.status,
+          // });
+
+          // console.log('in second');
+
+          // cma = [...cma, ...this._filterCma(realtyMoleResponse, listing)];
+          // console.log('in second', cma);
+
+          return cma;
+        } else {
+          return cma;
+        }
+      }
+    } else {
+      throw new HttpException('no listing exists with this id', 400);
     }
   }
 
