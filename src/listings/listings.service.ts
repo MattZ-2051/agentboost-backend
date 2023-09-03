@@ -101,30 +101,52 @@ export class ListingsService {
       realtyServiceDto,
     );
 
-    const listing = await this.listingRepo.findOneBy({
+    const listingExist = await this.listingRepo.findOneBy({
       id: parseInt(listingId, 10),
     });
 
-    if (listing) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+
+    if (listingExist) {
       if (realtyMoleResponse) {
-        let cma = this._filterCma(realtyMoleResponse, listing);
-
-        console.log('length', realtyMoleResponse.length);
+        const cma = this._filterCma(realtyMoleResponse, listingExist);
         if (cma.length < 3) {
-          // const realtyMoleResponse = await this.realtyService.getPropertyCma({
-          //   address: dto.address,
-          //   radius: (dto.radius += 5),
-          //   status: dto.status,
-          // });
-
-          // console.log('in second');
-
-          // cma = [...cma, ...this._filterCma(realtyMoleResponse, listing)];
-          // console.log('in second', cma);
-
-          return cma;
+          return await this.createCma(
+            {
+              address: dto.address,
+              radius: dto.radius + 10,
+              status: dto.status,
+            },
+            listingExist.id.toString(),
+          );
         } else {
-          return cma;
+          const updatedListing = await this.listingRepo.update(
+            { id: listingExist.id },
+            {
+              cma: JSON.parse(JSON.stringify(cma)),
+            },
+          );
+
+          if (updatedListing.affected === 1) {
+            const listing = await this.listingRepo.findOneBy({
+              id: listingExist.id,
+            });
+            try {
+              await queryRunner.manager.save(listing);
+              await queryRunner.commitTransaction();
+              return listing;
+            } catch (err) {
+              // since we have errors lets rollback the changes we made
+              await queryRunner.rollbackTransaction();
+              throw new HttpException('error updating listing', 500);
+            } finally {
+              // you need to release a queryRunner which was manually instantiated
+              await queryRunner.release();
+            }
+          } else {
+            throw new HttpException('error updating listing', 500);
+          }
         }
       }
     } else {
