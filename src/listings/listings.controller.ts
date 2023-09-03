@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Post, Body, Param } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { AtGuard } from 'src/auth/guards/auth.jwt-auth.guard';
-import { GetPropertyDescriptionDto } from './dto/listings.dto';
+import { CreateCmaDto, GetPropertyDescriptionDto } from './dto/listings.dto';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { CreateListingDto } from './dto/listings.dto';
 import { Listing } from './listings.entity';
@@ -27,6 +27,20 @@ export class ListingsController {
     });
 
     return data;
+  }
+
+  @UseGuards(AtGuard)
+  @Post('/generate-cma/:id')
+  async createCma(
+    @Param() params: { id: string },
+    @Body() createListingDto: CreateCmaDto,
+  ): Promise<Listing> {
+    return await this.listingsService.createCma(
+      {
+        ...createListingDto,
+      },
+      params.id,
+    );
   }
 
   @UseGuards(AtGuard)

@@ -10,6 +10,18 @@ export class GetPropertyDescriptionDto {
   keyInfo: string;
 }
 
+export class CreateCmaDto {
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  radius: number;
+
+  @IsString()
+  status: 'Active' | 'Inactive';
+}
 export class CreateListingDto {
   @IsNotEmpty()
   @IsString()
