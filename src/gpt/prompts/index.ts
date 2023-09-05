@@ -1,5 +1,8 @@
 import { RealtyMoleData } from 'src/realty/types/realty.types';
-import { GeneratePropertyInsightDto } from '../dto/gpt.dto';
+import {
+  GenerateListingGmcDto,
+  GeneratePropertyInsightDto,
+} from '../dto/gpt.dto';
 
 export const generalListingProperyDescription = ({
   propertyAddress,
@@ -49,4 +52,27 @@ export const generateListingPropertyInsightPrompt = ({
   Do not include any call to action, this is strictly analysis.`;
 
   return prompt;
+};
+
+export const generateListingGmc = ({
+  address,
+  bed,
+  bath,
+  location,
+  propertyDescription,
+  squareFt,
+}: GenerateListingGmcDto): { prompt1: string; prompt2: string } => {
+  return {
+    prompt1: `
+  Act as a realtor writing a social media caption for a new listing located at ${address}.
+  This house is a ${bed} ${bath} ${squareFt} and is described as ${propertyDescription}.
+  Include 10 optimized hashtags for selling real estate in ${location}
+  `,
+    prompt2: `
+    Act as a realtor writing a social media caption for a home located at ${address}.
+    This house is a ${bed} ${bath} ${squareFt} and is described as ${propertyDescription}.
+    Write 5 captions and each of these captions focus on a different unique feature of the home.
+    For each post, include 10 optimized hashtags for selling real estate in ${location}.
+  `,
+  };
 };

@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { GptModule } from './gpt/gpt.module';
 import { ListingsModule } from './listings/listings.module';
+import { GmcModule } from './gmc/gmc.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ListingsModule } from './listings/listings.module';
     GptModule,
     HttpModule,
     ListingsModule,
+    GmcModule,
   ],
   providers: [AppService],
   controllers: [AppController],
