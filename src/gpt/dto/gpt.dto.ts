@@ -44,3 +44,29 @@ export class GeneratePropertyInsightDto {
   @IsString()
   appreciationAvg: string;
 }
+
+export class GenerateListingGmcDto {
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  bed;
+
+  @IsNumber()
+  @IsNotEmpty()
+  bath;
+
+  @IsNumber()
+  @IsNotEmpty()
+  squareFt;
+
+  @IsString()
+  @IsNotEmpty()
+  propertyDescription;
+
+  @IsString()
+  @IsNotEmpty()
+  location;
+}

@@ -1,5 +1,12 @@
+import { Gmc } from '../gmc/gmc.entity';
 import { User } from '../user/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Listing {
@@ -71,6 +78,9 @@ export class Listing {
 
   @ManyToOne(() => User, (user) => user.listings, { nullable: false })
   user: User;
+
+  @OneToMany(() => Gmc, (gmc) => gmc.listing, { nullable: true })
+  gmc: Gmc[];
 }
 
 // @Entity()
