@@ -2,13 +2,13 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetPropertyDescriptionDto } from './dto/listings.dto';
-import { GptService } from 'src/gpt/gpt.service';
+import { GptService } from '../gpt/gpt.service';
 import { RealtyService } from 'src/realty/realty.service';
 import { CreateListingDto, CreateCmaDto } from './dto/listings.dto';
 import { Listing } from './listings.entity';
 import type { ChatCompletionResponseMessage } from 'openai';
-import { RealtyMoleData } from 'src/realty/types/realty.types';
-import { UserService } from '..//user/user.service';
+import { RealtyMoleData } from '../realty/types/realty.types';
+import { UserService } from '../user/user.service';
 import { SaleListing } from './types/listings.types';
 
 @Injectable()
@@ -78,9 +78,6 @@ export class ListingsService {
       if (
         item.bedrooms >= limits.bedBoundary.min &&
         item.bedrooms <= limits.bedBoundary.max &&
-        // modify value for lot size bounds
-        // item.lotSize >= limits.lotSizeBoundary.max &&
-        // item.lotSize <= limits.lotSizeBoundary.min &&
         item.squareFootage >= limits.squareFootageBoundary.min &&
         item.squareFootage <= limits.squareFootageBoundary.max
       ) {
@@ -91,7 +88,7 @@ export class ListingsService {
     return cma;
   }
 
-  async createCma(dto: CreateCmaDto, listingId: string): Promise<any> {
+  async createCma(dto: CreateCmaDto, listingId: string): Promise<Listing> {
     const realtyServiceDto = {
       address: dto.address,
       radius: dto.radius,
@@ -214,7 +211,7 @@ export class ListingsService {
             await queryRunner.release();
           }
         } else {
-          throw new HttpException('Error logging user out', 500);
+          throw new HttpException('error updating listing', 500);
         }
       } else {
         listing = await this.listingRepo.create({
@@ -241,8 +238,18 @@ export class ListingsService {
       }
     }
   }
-  async findOne(key: string, val: string | number): Promise<Listing | null> {
-    const listing = await this.listingRepo.findOneBy({ [key]: val });
+
+  async findOne(
+    key: string,
+    val: string | number,
+    relations?: string[],
+  ): Promise<Listing | null> {
+    const listing = await this.listingRepo.findOne({
+      where: {
+        [key]: val,
+      },
+      relations: relations ? relations : null,
+    });
 
     if (listing) {
       return listing;

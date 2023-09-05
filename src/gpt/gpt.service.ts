@@ -11,6 +11,8 @@ import {
   GeneratePropertyDescriptionDto,
   GeneratePropertyInsightDto,
 } from './dto/gpt.dto';
+import { parseGmcResults } from './utils';
+import { Gmc } from '../gmc/gmc.entity';
 
 @Injectable()
 export class GptService {
@@ -59,7 +61,9 @@ export class GptService {
     }
   }
 
-  async generateGmcForListing(dto: GenerateListingGmcDto) {
+  async generateGmcForListing(
+    dto: GenerateListingGmcDto,
+  ): Promise<{ firstCaption: string; otherCaptions: string[] }> {
     const configuration = new Configuration({
       apiKey: this.configService.get<string>('GPT_API_KEY'),
     });
@@ -76,7 +80,11 @@ export class GptService {
         messages: [{ role: 'user', content: content.prompt2 }],
       });
 
-      return { data1: response1.data, data2: response2.data };
+      const res1 = response1.data?.choices?.[0]?.message?.content;
+      const res2 = response2.data?.choices?.[0]?.message?.content;
+
+      const returnData = parseGmcResults(res1, res2);
+      return returnData;
     } catch (err) {
       console.log('gpt error', err.response);
       throw new HttpException('error with ai', 500);

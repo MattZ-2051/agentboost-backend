@@ -80,7 +80,7 @@ export class Listing {
   user: User;
 
   @OneToMany(() => Gmc, (gmc) => gmc.listing, { nullable: true })
-  gmc: Gmc[];
+  gmcs: Gmc[];
 }
 
 // @Entity()

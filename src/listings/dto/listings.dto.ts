@@ -22,6 +22,7 @@ export class CreateCmaDto {
   @IsString()
   status: 'Active' | 'Inactive';
 }
+
 export class CreateListingDto {
   @IsNotEmpty()
   @IsString()
