@@ -7,23 +7,11 @@ export class Gmc {
   id: number;
 
   @Column({ nullable: false, type: 'text' })
-  description: string;
+  caption: string;
 
-  @Column({ nullable: false, type: 'text' })
-  caption1: string;
+  @Column({ nullable: true, type: 'text' })
+  img: string;
 
-  @Column({ nullable: false, type: 'text' })
-  caption2: string;
-
-  @Column({ nullable: false, type: 'text' })
-  caption3: string;
-
-  @Column({ nullable: false, type: 'text' })
-  caption4: string;
-
-  @Column({ nullable: false, type: 'text' })
-  caption5: string;
-
-  @ManyToOne(() => Listing, (listing) => listing.gmc, { nullable: false })
+  @ManyToOne(() => Listing, (listing) => listing.gmcs)
   listing: Listing;
 }
