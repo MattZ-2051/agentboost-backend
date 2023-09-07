@@ -112,7 +112,7 @@ export class ListingsService {
           return await this.createCma(
             {
               address: dto.address,
-              radius: dto.radius + 10,
+              radius: dto.radius + 3,
               status: dto.status,
             },
             listingExist.id.toString(),
