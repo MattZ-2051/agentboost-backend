@@ -12,7 +12,6 @@ import {
   GeneratePropertyInsightDto,
 } from './dto/gpt.dto';
 import { parseGmcResults } from './utils';
-import { Gmc } from '../gmc/gmc.entity';
 
 @Injectable()
 export class GptService {
