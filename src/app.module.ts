@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import { GptModule } from './gpt/gpt.module';
 import { ListingsModule } from './listings/listings.module';
 import { GmcModule } from './gmc/gmc.module';
+import { ZillowService } from './zillow/zillow.service';
+import { ZillowController } from './zillow/zillow.controller';
+import { ZillowModule } from './zillow/zillow.module';
 
 @Module({
   imports: [
@@ -34,8 +37,9 @@ import { GmcModule } from './gmc/gmc.module';
     HttpModule,
     GmcModule,
     ListingsModule,
+    ZillowModule,
   ],
-  providers: [AppService],
-  controllers: [AppController],
+  providers: [AppService, ZillowService],
+  controllers: [AppController, ZillowController],
 })
 export class AppModule {}
