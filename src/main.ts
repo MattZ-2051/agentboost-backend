@@ -5,7 +5,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin:
-      'http://localhost:3000' || 'https://agentboost-frontend-dev.vercel.app/',
+      'http://localhost:3000' ||
+      'https://agentboost-frontend-dev.vercel.app/' ||
+      'https://agentboost-api-dev.up.railway.app/',
     credentials: true,
   });
   await app.listen(process.env.PORT || 5001);
