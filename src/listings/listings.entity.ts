@@ -52,7 +52,7 @@ export class Listing {
   @Column({ nullable: false, type: 'int' })
   yearBuilt: number;
 
-  @Column({ nullable: false, type: 'int' })
+  @Column({ nullable: false, type: 'float' })
   bathrooms: number;
 
   @Column({ nullable: false, type: 'int' })

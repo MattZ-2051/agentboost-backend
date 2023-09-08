@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { GmcService } from './gmc.service';
 import { CreateGmcDto } from './dto/gmc.dto';
-import { Gmc } from './gmc.entity';
+import { Listing } from 'src/listings/listings.entity';
 
 @Controller('gmc')
 export class GmcController {
@@ -9,7 +9,7 @@ export class GmcController {
 
   @UseGuards()
   @Post('/create')
-  async createGmc(@Body() createGmcDto: CreateGmcDto): Promise<Gmc[]> {
+  async createGmc(@Body() createGmcDto: CreateGmcDto): Promise<Listing> {
     return await this.gmcService.createGmc(createGmcDto);
   }
 }

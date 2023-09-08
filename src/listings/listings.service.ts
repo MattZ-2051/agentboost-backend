@@ -108,6 +108,7 @@ export class ListingsService {
     if (listingExist) {
       if (realtyMoleResponse) {
         const cma = this._filterCma(realtyMoleResponse, listingExist);
+        console.log('cma', cma.length);
         if (cma.length < 3) {
           return await this.createCma(
             {
@@ -118,16 +119,20 @@ export class ListingsService {
             listingExist.id.toString(),
           );
         } else {
+          const newCma = cma.slice(0, 4);
           const updatedListing = await this.listingRepo.update(
             { id: listingExist.id },
             {
-              cma: JSON.parse(JSON.stringify(cma)),
+              cma: JSON.parse(JSON.stringify(newCma)),
             },
           );
 
           if (updatedListing.affected === 1) {
-            const listing = await this.listingRepo.findOneBy({
-              id: listingExist.id,
+            const listing = await this.listingRepo.findOne({
+              where: {
+                id: listingExist.id,
+              },
+              relations: ['user'],
             });
             try {
               await queryRunner.manager.save(listing);
@@ -196,6 +201,7 @@ export class ListingsService {
             where: {
               formattedAddress: dto.formattedAddress,
             },
+            relations: ['user'],
           });
 
           try {
@@ -227,6 +233,7 @@ export class ListingsService {
         } catch (err) {
           // since we have errors lets rollback the changes we made
           await queryRunner.rollbackTransaction();
+          console.log('error', err);
           throw new HttpException(
             'error creating listing, missing fields',
             400,
