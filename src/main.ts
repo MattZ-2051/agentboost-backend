@@ -6,8 +6,8 @@ async function bootstrap() {
   app.enableCors({
     origin:
       'http://localhost:3000' ||
-      'https://agentboost-frontend-dev.vercel.app/' ||
-      'https://agentboost-api-dev.up.railway.app/',
+      'https://agentboost-frontend-dev.vercel.app' ||
+      'https://agentboost-api-dev.up.railway.app',
     credentials: true,
   });
   await app.listen(process.env.PORT || 5001);

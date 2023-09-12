@@ -54,6 +54,9 @@ export class ListingsController {
   @UseGuards(AtGuard)
   @Get(':id')
   async getListing(@Param() params: { id: string }): Promise<Listing> {
-    return await this.listingsService.findOne('id', params.id, ['gmcs']);
+    return await this.listingsService.findOne('id', params.id, [
+      'gmcs',
+      'user',
+    ]);
   }
 }
