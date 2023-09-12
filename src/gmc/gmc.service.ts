@@ -20,7 +20,7 @@ export class GmcService {
   async createGmc(dto: CreateGmcDto): Promise<Listing> {
     const listing = await this.listingsService.findOne('id', dto.listingId, [
       'gmcs',
-      'users',
+      'user',
     ]);
 
     if (listing?.gmcs?.length === 0) {
