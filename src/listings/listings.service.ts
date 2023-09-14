@@ -10,6 +10,7 @@ import type { ChatCompletionResponseMessage } from 'openai';
 import { RealtyMoleData } from '../realty/types/realty.types';
 import { UserService } from '../user/user.service';
 import { SaleListing } from './types/listings.types';
+import { ZillowService } from 'src/zillow/zillow.service';
 
 @Injectable()
 export class ListingsService {
@@ -17,6 +18,7 @@ export class ListingsService {
     private readonly gptService: GptService,
     private readonly usersService: UserService,
     private readonly realtyService: RealtyService,
+    private readonly zillowService: ZillowService,
     private readonly dataSource: DataSource,
     @InjectRepository(Listing)
     private readonly listingRepo: Repository<Listing>,
@@ -46,6 +48,25 @@ export class ListingsService {
         };
       }
     }
+  }
+
+  private async _getCmaImages(cma: any[]): Promise<any[]> {
+    const newCma = [];
+    for (const item of cma) {
+      try {
+        const response = await this.zillowService.getPropertyImages({
+          address: item.formattedAddress,
+        });
+        if (response.length > 0) {
+          item['zillowImages'] = response;
+          newCma.push(item);
+        }
+      } catch (error) {
+        console.log('error', error);
+        throw new HttpException('error getting zillow images', 500);
+      }
+    }
+    return newCma;
   }
 
   private _filterCma(
@@ -108,7 +129,6 @@ export class ListingsService {
     if (listingExist) {
       if (realtyMoleResponse) {
         const cma = this._filterCma(realtyMoleResponse, listingExist);
-        console.log('cma', cma.length);
         if (cma.length < 3) {
           return await this.createCma(
             {
@@ -119,7 +139,8 @@ export class ListingsService {
             listingExist.id.toString(),
           );
         } else {
-          const newCma = cma.slice(0, 4);
+          let newCma = cma.slice(0, 4);
+          newCma = await this._getCmaImages(newCma);
           const updatedListing = await this.listingRepo.update(
             { id: listingExist.id },
             {
