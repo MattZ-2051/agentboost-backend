@@ -21,4 +21,5 @@ export type SaleListing = {
   id: string;
   latitude: number;
   longitude: number;
+  zillowImages: string[];
 };

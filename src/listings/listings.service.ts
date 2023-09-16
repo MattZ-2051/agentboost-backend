@@ -50,21 +50,19 @@ export class ListingsService {
     }
   }
 
-  private async _getCmaImages(cma: any[]): Promise<any[]> {
-    const newCma = [];
+  private async _getCmaImages(cma: any[]): Promise<SaleListing[]> {
+    const newCma: SaleListing[] = [];
+    function delay(t) {
+      return new Promise((resolve) => setTimeout(resolve, t));
+    }
+
     for (const item of cma) {
-      try {
-        const response = await this.zillowService.getPropertyImages({
-          address: item.formattedAddress,
-        });
-        if (response.length > 0) {
-          item['zillowImages'] = response;
-          newCma.push(item);
-        }
-      } catch (error) {
-        console.log('error', error);
-        throw new HttpException('error getting zillow images', 500);
-      }
+      await delay(3000);
+      const response = await this.zillowService.getPropertyImages({
+        address: item.formattedAddress,
+      });
+      item['zillowImages'] = response;
+      newCma.push(item);
     }
     return newCma;
   }
@@ -153,7 +151,6 @@ export class ListingsService {
               where: {
                 id: listingExist.id,
               },
-              relations: ['user'],
             });
             try {
               await queryRunner.manager.save(listing);
@@ -196,7 +193,6 @@ export class ListingsService {
         where: {
           formattedAddress: dto.formattedAddress,
         },
-        relations: ['user'],
       });
 
       const listingCreator = await this.usersService.findOne('id', dto.userId);
@@ -222,7 +218,6 @@ export class ListingsService {
             where: {
               formattedAddress: dto.formattedAddress,
             },
-            relations: ['user'],
           });
 
           try {
