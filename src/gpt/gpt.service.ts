@@ -83,6 +83,8 @@ export class GptService {
       const res2 = response2.data?.choices?.[0]?.message?.content;
 
       const returnData = parseGmcResults(res1, res2);
+
+      console.log('resturn data', returnData);
       return returnData;
     } catch (err) {
       console.log('gpt error', err.response);

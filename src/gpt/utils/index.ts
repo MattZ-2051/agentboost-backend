@@ -1,17 +1,16 @@
-// import { Gmc } from '../../gmc/gmc.entity';
-
 import { Gmc } from '../../gmc/gmc.entity';
 
-// const testCaptions = `1. "Step inside this charming Single Family Home nestled in the heart of Boise, ID. With 2 bedrooms and 2 bathrooms, this cozy dwelling offers the perfect size for comfortable living. #BoiseHomesForSale #CharmingHome #CozyLiving #IDRealEstate #SmallButMighty"
+// const caption1 =
+//   '#NampaIDHomes #NampaRealEstate #HomeForSale #DreamHome #MoveInReady #SpaciousLiving #ConvenientLocation #IdealFamilyHome #MustSeeProperty #ModernAmenities';
+// const caption2 = `1. "Welcome to your spacious oasis in Nampa! 🏡✨ With 4 bedrooms and 2.5 baths, this home offers plenty of room for your family to grow. #NampaHomesForSale #FamilyLiving #SpaciousLiving"
 
-// 2. "Experience the timeless appeal of 10044 W Springdale Ct. This well-maintained home boasts a unique character and a thoughtful floor plan that allows for seamless flow between spaces. #BoiseRealEstate #TimelessCharm #WelcomingHome #BoiseID #HomeSweetHome"
+// 2. "Step into timeless charm at 692 W Crimson Loop! ❤️🏠 This immaculate home built in 2003 has been lovingly maintained to offer the perfect blend of classic and modern. #TimelessCharm #ClassicHome #ModernAmenities"
 
-// 3. "Built in 1976, this home carries a sense of history and quality craftsmanship. The interior exudes warmth, providing an inviting atmosphere for your everyday enjoyment. #VintageHome #Craftsmanship #WarmAndInviting #TimelessBeauty #HomeSweetHome"
+// 3. "Make yourself at home in this light-filled sanctuary! ☀️🌿 The open floor plan and abundance of windows create a warm and inviting atmosphere throughout the day. #LightAndBright #OpenFloorPlan #NaturalLight"
 
-// 4. "Situated on a well-manicured lot, this home offers a spacious two-car garage and a delightful atrium. Enjoy the beauty of nature indoors and unwind in your own serene oasis. #BoiseLiving #OutdoorLiving #SereneOasis #RelaxationTime #NatureLovers"
+// 4. "Say hello to the perfect garage for your vehicles and storage needs! 🚗💼 The spacious garage at 692 W Crimson Loop has room for two cars and extra space for all your belongings. #GarageGoals #AmpleStorage #CarLovers"
 
-// 5. "Explore the vibrant city of Boise, ID, just moments from your doorstep. From picturesque parks to diverse dining options, there's always something to discover. Don't miss out on this incredible real estate opportunity! #BoiseLife #CityLiving #OutdoorAdventures #DreamHome #BoiseIDRealEstate""
-// `;
+// 5. "Discover the best of both worlds – peace and convenience! 🌳🛍️ Located in a tranquil neighborhood, this home is just minutes away from schools, parks, shopping centers, and restaurants. #PeacefulLiving #ConvenientLocation #CloseToEverything`;
 
 export const parseGmcResults = (
   res1: string,
@@ -19,18 +18,15 @@ export const parseGmcResults = (
 ): { firstCaption: string; otherCaptions: string[] } => {
   const result: Gmc['caption'][] = [];
 
-  for (let i = 1; i < 6; i++) {
-    if (i < 5) {
-      const caption = res2
-        .replace(/(\r\n|\n|\r)/gm, ' ')
-        .substring(res2.indexOf(`${i}.`), res2.indexOf(`${i + 1}.`));
-      result.push(caption);
-    } else {
-      const caption = res2
-        .replace(/(\r\n|\n|\r)/gm, ' ')
-        .substring(res2.indexOf(`${i}.`), res2.length - 1);
-      result.push(caption);
-    }
+  let match;
+
+  console.log('resses', res1, res2);
+  const regex = /(\d+\.)\s+"([^"]+)"/g;
+  while ((match = regex.exec(res2)) !== null) {
+    // const number = match[1];
+    const content = match[2];
+    result.push(content);
   }
+
   return { firstCaption: res1, otherCaptions: result };
 };
