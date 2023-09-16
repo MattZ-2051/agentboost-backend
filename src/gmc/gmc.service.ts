@@ -20,7 +20,6 @@ export class GmcService {
   async createGmc(dto: CreateGmcDto): Promise<Listing> {
     const listing = await this.listingsService.findOne('id', dto.listingId, [
       'gmcs',
-      'user',
     ]);
 
     if (listing?.gmcs?.length === 0) {
@@ -74,7 +73,13 @@ export class GmcService {
         throw new HttpException('missing data for gmc', 400);
       }
 
-      return listing;
+      const newListing = await this.listingsService.findOne(
+        'id',
+        dto.listingId,
+        ['gmcs'],
+      );
+
+      return newListing;
     } else {
       return listing;
     }

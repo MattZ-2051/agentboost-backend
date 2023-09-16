@@ -31,9 +31,10 @@ export class ZillowService {
       if (imgSrc) {
         return [imgSrc];
       } else {
-        throw new HttpException('zillow error: img not found', 500);
+        return [];
       }
     } catch (error) {
+      console.log('zillow error:', error);
       throw new HttpException('zillow error', 500);
     }
   }
