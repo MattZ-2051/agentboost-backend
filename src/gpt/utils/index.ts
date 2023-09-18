@@ -20,9 +20,14 @@ export const parseGmcResults = (
 
   let match;
 
-  console.log('resses', res1, res2);
-  const regex = /(\d+\.)\s+"([^"]+)"/g;
-  while ((match = regex.exec(res2)) !== null) {
+  const regex1 = /(\d+\.)\s+"([^"]+)"/g;
+  const regex2 = /(\d+\:)\s+"([^"]+)"/g;
+  const regex3 = /(^Caption$:)\s/g;
+  while (
+    (match = regex1.exec(res2)) !== null ||
+    regex2.exec(res2) !== null ||
+    regex3.exec(res2) !== null
+  ) {
     // const number = match[1];
     const content = match[2];
     result.push(content);

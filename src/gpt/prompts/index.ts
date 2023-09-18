@@ -37,19 +37,48 @@ export const generalListingProperyDescription = ({
 
 export const generateListingPropertyInsightPrompt = ({
   subdivision,
-  avgDays,
-  pricePerFoot,
+  bedrooms,
+  squareFt,
+  radius,
+  pool,
   lotSize,
-  avgLotSize,
-  soldPrice,
-  appreciationAvg,
 }: GeneratePropertyInsightDto): string => {
-  const prompt = `Act as a realtor and write a 3 paragraph analysis of this home based on the following information.
-  The average days on market for a home in ${subdivision} in the last 6 months is ${avgDays}. The last home sold in ${subdivision} sold in ${subdivision} for ${pricePerFoot} or ${soldPrice}. Appreciation in ${subdivision} has been ${appreciationAvg}.
-  The lot size of the subject home is ${lotSize} compared to the average lot size of ${avgLotSize}.
-  State the advantages and disadvantages of this home compared to the averages of the subdivision and summarize the other data into a professional summary.
+  const subdivisionOrRadius = subdivision
+    ? `in ${subdivision}`
+    : `in a ${radius}km radius`;
+
+  let averageDaysOnMarket = 0;
+  let averageLotSize = 0;
+  let pricePerFoot = 23;
+  let averageSquareFt = 0;
+  let averageBedrooms = 0;
+  let daysOld = 24;
+
+  for (const item of pool) {
+    averageDaysOnMarket += item.daysOnMarket ? item.daysOnMarket : 0;
+    averageLotSize += item.lotSize ? item.lotSize : 0;
+    averageSquareFt += item.squareFootage ? item.squareFootage : 0;
+    averageBedrooms += item.bedrooms ? item.bedrooms : 0;
+  }
+  averageLotSize = averageLotSize / pool.length;
+  averageDaysOnMarket = averageDaysOnMarket / pool.length;
+  averageSquareFt = averageSquareFt / pool.length;
+  averageBedrooms = averageBedrooms / pool.length;
+
+  const prompt = `Act as realtor (Agent profile key words) and write a 2 paragraph analysis of this home based on the following information.
+  The average days on market for a home (${subdivisionOrRadius}) in the last 6 months is (${averageDaysOnMarket}).
+  The most recent home sold in (${subdivisionOrRadius}) sold in (${daysOld}) days for $(${pricePerFoot}) per square foot - Do not analyze this, just state it.
+  The lot size of the subject home is (${lotSize}) compared to the average lot size of (${averageLotSize})
+  - State whether this is an advantage or disadvantage for the subject home compared to the other homes in the area or subdivision.
+  The subject home has (${bedrooms}) bedrooms. The average for the area/subdivision is (${averageBedrooms})
+  - State whether this is an advantage or disadvantage for the subject home compared to the other homes in the area or subdivision.
+  This home has a sqft of (${squareFt}). The average sqft for the area/subdivision is (${averageSquareFt})
+  - State whether this is an advantage or disadvantage for the subject home compared to the other homes in the area or subdivision.
+  Summarize the data into a professional summary.
   This is not a property description, exclude all information that is not analysis.
-  Do not include any call to action, this is strictly analysis.`;
+  Do not include any call to action, this is strictly analysis.
+  Include a paragraph with marketing strategies that could help this property sell faster based on its strengths,
+  only include marketing tips that are directly related to its comparison to other homes in the area/subdivision.`;
 
   return prompt;
 };

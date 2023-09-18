@@ -175,15 +175,18 @@ export class ListingsService {
   }
 
   async createListing(dto: CreateListingDto): Promise<Listing> {
+    const radius = 5;
+    const propertyInsightData = await this.realtyService.getPropertyInsightData(
+      { address: dto.address, radius },
+    );
     const gptResponse = await this.gptService.generatePropertyInsightForListing(
       {
-        subdivision: dto.subdivision || 'raintree',
-        avgDays: '23',
-        pricePerFoot: '$500',
-        soldPrice: '$200,000',
-        avgLotSize: '.30',
-        appreciationAvg: '10%',
-        lotSize: '.23',
+        pool: propertyInsightData,
+        radius,
+        squareFt: dto.squareFootage,
+        bedrooms: dto.bedrooms,
+        lotSize: dto.lotSize,
+        subdivision: dto.subdivision,
       },
     );
 
