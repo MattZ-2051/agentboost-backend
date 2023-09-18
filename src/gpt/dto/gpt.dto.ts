@@ -16,33 +16,27 @@ export class GeneratePropertyDescriptionDto {
 }
 
 export class GeneratePropertyInsightDto {
-  @IsString()
   @IsNotEmpty()
+  @IsNumber()
+  squareFt: number;
+
+  @IsNotEmpty()
+  @IsString()
+  bedrooms: number;
+
+  @IsString()
   subdivision: string;
 
   @IsNotEmpty()
-  @IsString()
-  avgDays: string;
-
-  @IsNotEmpty()
-  @IsString()
-  pricePerFoot: string;
-
-  @IsNotEmpty()
-  @IsString()
-  soldPrice: string;
+  @IsNumber()
+  radius: number;
 
   @IsNotEmpty()
   @IsNumber()
-  lotSize: string;
+  lotSize: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  avgLotSize: string;
-
-  @IsNotEmpty()
-  @IsString()
-  appreciationAvg: string;
+  pool: any[];
 }
 
 export class GenerateListingGmcDto {

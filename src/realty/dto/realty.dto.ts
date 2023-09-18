@@ -18,3 +18,13 @@ export class GetPropertyCmaDataDto {
   @IsString()
   status: 'Active' | 'Inactive';
 }
+
+export class GetPropertyInsightDto {
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  radius: number;
+}
