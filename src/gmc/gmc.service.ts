@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Gmc } from './gmc.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateGmcDto } from './dto/gmc.dto';
-import { ListingsService } from 'src/listings/listings.service';
+import { ListingsService } from 'src/listing/listing.service';
 import { GptService } from 'src/gpt/gpt.service';
-import { Listing } from 'src/listings/listings.entity';
+import { Listing } from 'src/listing/listings.entity';
 
 @Injectable()
 export class GmcService {

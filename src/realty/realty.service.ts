@@ -7,7 +7,7 @@ import {
   GetPropertyListingDataDto,
 } from './dto/realty.dto';
 import { RealtyMoleData } from './types/realty.types';
-import { SaleListing } from 'src/listings/types/listings.types';
+import { SaleListing } from 'src/listing/types/listings.types';
 
 @Injectable()
 export class RealtyService {
