@@ -1,10 +1,10 @@
 import { Controller, Get, UseGuards, Post, Body, Param } from '@nestjs/common';
-import { ListingsService } from './listings.service';
+import { ListingsService } from './listing.service';
 import { AtGuard } from '../auth/guards/auth.jwt-auth.guard';
 import { CreateCmaDto, GetPropertyDescriptionDto } from './dto/listings.dto';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { CreateListingDto } from './dto/listings.dto';
-import { Listing } from './listings.entity';
+import { Listing } from './listing.entity';
 import { RealtyMoleData } from 'src/realty/types/realty.types';
 
 @Controller('listings')

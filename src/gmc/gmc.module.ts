@@ -3,7 +3,7 @@ import { GmcController } from './gmc.controller';
 import { GmcService } from './gmc.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Gmc } from './gmc.entity';
-import { ListingsModule } from '../listings/listings.module';
+import { ListingsModule } from '../listing/listing.module';
 import { GptModule } from '../gpt/gpt.module';
 
 @Module({

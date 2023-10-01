@@ -5,7 +5,7 @@ import { GetPropertyDescriptionDto } from './dto/listings.dto';
 import { GptService } from '../gpt/gpt.service';
 import { RealtyService } from 'src/realty/realty.service';
 import { CreateListingDto, CreateCmaDto } from './dto/listings.dto';
-import { Listing } from './listings.entity';
+import { Listing } from './listing.entity';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { RealtyMoleData } from '../realty/types/realty.types';
 import { UserService } from '../user/user.service';

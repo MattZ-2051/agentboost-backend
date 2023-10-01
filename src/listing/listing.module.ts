@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ListingsService } from './listings.service';
-import { ListingsController } from './listings.controller';
+import { ListingsService } from './listing.service';
+import { ListingsController } from './listing.controller';
 import { Listing } from './listings.entity';
 import { RealtyModule } from '../realty/realty.module';
 import { GptModule } from '../gpt/gpt.module';

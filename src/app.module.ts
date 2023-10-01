@@ -8,11 +8,14 @@ import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { GptModule } from './gpt/gpt.module';
-import { ListingsModule } from './listings/listings.module';
+import { ListingsModule } from './listing/listing.module';
 import { GmcModule } from './gmc/gmc.module';
 import { ZillowService } from './zillow/zillow.service';
 import { ZillowController } from './zillow/zillow.controller';
 import { ZillowModule } from './zillow/zillow.module';
+import { BuyerController } from './buyer/buyer.controller';
+import { BuyerService } from './buyer/buyer.service';
+import { BuyerModule } from './buyer/buyer.module';
 
 @Module({
   imports: [
@@ -38,8 +41,9 @@ import { ZillowModule } from './zillow/zillow.module';
     GmcModule,
     ListingsModule,
     ZillowModule,
+    BuyerModule,
   ],
-  providers: [AppService, ZillowService],
-  controllers: [AppController, ZillowController],
+  providers: [AppService, ZillowService, BuyerService],
+  controllers: [AppController, ZillowController, BuyerController],
 })
 export class AppModule {}
