@@ -5,7 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateGmcDto } from './dto/gmc.dto';
 import { ListingsService } from 'src/listing/listing.service';
 import { GptService } from 'src/gpt/gpt.service';
-import { Listing } from 'src/listing/listings.entity';
+import { Listing } from 'src/listing/listing.entity';
 
 @Injectable()
 export class GmcService {

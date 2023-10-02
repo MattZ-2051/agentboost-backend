@@ -1,4 +1,4 @@
-import { Listing } from '../listing/listings.entity';
+import { Listing } from '../listing/listing.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
