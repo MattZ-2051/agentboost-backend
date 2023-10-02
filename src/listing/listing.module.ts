@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ListingsService } from './listing.service';
 import { ListingsController } from './listing.controller';
-import { Listing } from './listings.entity';
+import { Listing } from './listing.entity';
 import { RealtyModule } from '../realty/realty.module';
 import { GptModule } from '../gpt/gpt.module';
 import { TypeOrmModule } from '@nestjs/typeorm';

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { GmcService } from './gmc.service';
 import { CreateGmcDto } from './dto/gmc.dto';
-import { Listing } from 'src/listing/listings.entity';
+import { Listing } from 'src/listing/listing.entity';
 
 @Controller('gmc')
 export class GmcController {
