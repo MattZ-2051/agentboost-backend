@@ -1,8 +1,14 @@
-import { HttpException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gmc } from './gmc.entity';
 import { DataSource, Repository } from 'typeorm';
-import { CreateGmcDto } from './dto/gmc.dto';
+import { AddToCalenderDto, CreateGmcDto } from './dto/gmc.dto';
 import { ListingsService } from 'src/listing/listing.service';
 import { GptService } from 'src/gpt/gpt.service';
 import { Listing } from 'src/listing/listing.entity';
@@ -16,6 +22,63 @@ export class GmcService {
     private readonly listingsService: ListingsService,
     private readonly gptService: GptService,
   ) {}
+
+  async addGmcToCalender(dto: AddToCalenderDto): Promise<Listing> {
+    const listing = await this.listingsService.findOne('id', dto.listingId, [
+      'gmcs',
+    ]);
+
+    if (listing?.gmcs?.length > 0) {
+      let date = new Date(dto.startDate)
+        .toISOString()
+        .replace('-', '/')
+        .split('T')[0]
+        .replace('-', '/');
+
+      for (const data of listing.gmcs) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+        const gmc = await this.gmcRepo.update(
+          {
+            id: data.id,
+          },
+          {
+            ...data,
+            calenderDate: date,
+          },
+        );
+
+        if (gmc.affected === 1) {
+          const updatedGmc = await this.gmcRepo.findOne({
+            where: {
+              id: data.id,
+            },
+          });
+          try {
+            await queryRunner.manager.save(updatedGmc);
+            await queryRunner.commitTransaction();
+            const dateEvent = new Date(date);
+            dateEvent.setDate(dateEvent.getDate() + 7);
+            date = new Date(dateEvent)
+              .toISOString()
+              .replace('-', '/')
+              .split('T')[0]
+              .replace('-', '/');
+          } catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw new HttpException('error updating gmc', 500);
+          } finally {
+            await queryRunner.release();
+          }
+        } else {
+          throw new HttpException('error updating gmc', 500);
+        }
+      }
+      return listing;
+    } else {
+      throw new HttpException('no gmcs exist on listing', 400);
+    }
+  }
 
   async createGmc(dto: CreateGmcDto): Promise<Listing> {
     const listing = await this.listingsService.findOne('id', dto.listingId, [
