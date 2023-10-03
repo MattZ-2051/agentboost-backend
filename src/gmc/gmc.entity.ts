@@ -12,6 +12,9 @@ export class Gmc {
   @Column({ nullable: true, type: 'text' })
   img: string;
 
+  @Column({ nullable: true, type: 'varchar' })
+  calenderDate: string;
+
   @ManyToOne(() => Listing, (listing) => listing.gmcs)
   listing: Listing;
 }

@@ -1,4 +1,14 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
+export class AddToCalenderDto {
+  @IsString()
+  @IsNotEmpty()
+  listingId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  startDate: string;
+}
 
 export class CreateGmcDto {
   @IsString()
