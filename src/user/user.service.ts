@@ -28,11 +28,17 @@ export class UserService {
     return 'return all users!';
   }
 
+  /**
+   * @param {email} - existing email of user to find them by
+   * @param {areaOfExpertise} - new area of expertise
+   * @param {brandDescription} - new user brand description
+   * @returns - update user object from db
+   */
   async updateUser({
     email,
     areaOfExpertise,
     brandDescription,
-  }: UpdateUserDto) {
+  }: UpdateUserDto): Promise<User> {
     const userExists = await this.userRepo.findOneBy({ email });
     if (!userExists) {
       throw new HttpException('User does not exist', 400);
@@ -88,6 +94,12 @@ export class UserService {
     }
   }
 
+  /**
+   *
+   * @param userId - id of user in db
+   * @param hash - new refresh token hash to update user with
+   * @returns void
+   */
   async updateRtHash(userId: number, hash: string): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
