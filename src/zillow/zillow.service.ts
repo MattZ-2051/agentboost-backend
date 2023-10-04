@@ -58,4 +58,30 @@ export class ZillowService {
       throw new HttpException('zillow error', 500);
     }
   }
+
+  async getPropertyComps(zpid: string): Promise<any[]> {
+    const apiKey = this.configService.get<string>('ZILLOW_API_KEY');
+    const apiUrl = this.configService.get<string>('ZILLOW_API_HOST');
+
+    try {
+      const response = await this.httpService.axiosRef.get<any[]>(
+        `${apiUrl}/propertyComps`,
+        {
+          params: {
+            zpid,
+          },
+          headers: {
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': 'zillow-com1.p.rapidapi.com',
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('zillow error:', error);
+      throw new HttpException('zillow error', 500);
+    }
+    return;
+  }
 }
