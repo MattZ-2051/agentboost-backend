@@ -26,11 +26,15 @@ export class CreateCmaDto {
 export class CreateListingDto {
   @IsNotEmpty()
   @IsString()
-  address: string;
+  streetAddress: string;
 
   @IsNotEmpty()
   @IsString()
   propertyDescription: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  zpid: number;
 
   @IsNotEmpty()
   @IsString()
@@ -45,54 +49,22 @@ export class CreateListingDto {
   zipCode: string;
 
   @IsNotEmpty()
-  @IsString()
-  formattedAddress: string;
+  @IsNumber()
+  bedrooms: number;
 
   @IsNotEmpty()
   @IsNumber()
-  bedrooms: number;
+  price: number;
+
+  @IsString()
+  neighberhood: string;
 
   @IsString()
   county: string;
 
-  @IsString()
-  legalDescription: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  squareFootage: number;
-
-  @IsString()
-  subdivision: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  yearBuilt: number;
-
   @IsNotEmpty()
   @IsNumber()
   bathrooms: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  lotSize: number;
-
-  @IsNotEmpty()
-  @IsString()
-  propertyType: string;
-
-  @IsString()
-  lastSaleDate: string;
-
-  @IsNotEmpty()
-  @IsJSON()
-  features: JSON;
-
-  @IsJSON()
-  propertyTaxes: JSON;
-
-  @IsJSON()
-  owner: JSON;
 
   @IsNotEmpty()
   @IsString()

@@ -13,9 +13,6 @@ export class Listing {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true, type: 'varchar' })
-  address: string;
-
   @Column({ nullable: false, type: 'int' })
   zpid: number;
 
@@ -39,6 +36,12 @@ export class Listing {
 
   @Column({ nullable: false, type: 'text' })
   description: string;
+
+  @Column({ nullable: false, type: 'text' })
+  propertyDescription: string;
+
+  @Column({ nullable: false, type: 'text' })
+  propertyInsight: string;
 
   @Column({ nullable: false, type: 'int' })
   bedrooms: number;

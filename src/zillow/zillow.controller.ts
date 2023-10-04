@@ -15,4 +15,11 @@ export class ZillowController {
     const address = params.address;
     return await this.zillowService.getPropertyInfo({ address });
   }
+
+  @UseGuards(AtGuard)
+  @Get('/comps/:zpid')
+  async getPropertyComps(@Param() params: { zpid: string }): Promise<any> {
+    const zpid = params.zpid;
+    return await this.zillowService.getPropertyComps(zpid);
+  }
 }
