@@ -23,6 +23,13 @@ export class ListingsService {
     private readonly listingRepo: Repository<Listing>,
   ) {}
 
+  /**
+   *
+   * @param {address} - address of property from frontend formatted in address, city, state
+   * @param {keyInfo} - additional info provided by user to help with chat gpt description
+   * @returns {choices, zillowInfo} - choices is the chat gpt response and zillowInfo is response from zilow api
+   */
+
   async getPropertyDescription({
     address,
     keyInfo,
