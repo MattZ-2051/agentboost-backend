@@ -19,14 +19,14 @@ export class GptService {
   async generateDescriptionForListing({
     address,
     keyInfo,
-    realtyMoleData,
+    zillowInfo,
   }: GeneratePropertyDescriptionDto) {
     const configuration = new Configuration({
       apiKey: this.configService.get<string>('GPT_API_KEY'),
     });
     const openai = new OpenAIApi(configuration);
     const content = generalListingProperyDescription({
-      realtyMoleData,
+      zillowInfo,
       propertyAddress: address,
       extra: keyInfo,
     });

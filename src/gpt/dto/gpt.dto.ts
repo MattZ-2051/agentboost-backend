@@ -1,5 +1,5 @@
 import { IsJSON, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { RealtyMoleData } from 'src/realty/types/realty.types';
+import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
 export class GeneratePropertyDescriptionDto {
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class GeneratePropertyDescriptionDto {
 
   @IsNotEmpty()
   @IsJSON()
-  realtyMoleData: RealtyMoleData;
+  zillowInfo: ZillowPropertyInfo;
 }
 
 export class GeneratePropertyInsightDto {

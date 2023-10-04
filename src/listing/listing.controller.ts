@@ -5,7 +5,7 @@ import { CreateCmaDto, GetPropertyDescriptionDto } from './dto/listings.dto';
 import type { ChatCompletionResponseMessage } from 'openai';
 import { CreateListingDto } from './dto/listings.dto';
 import { Listing } from './listing.entity';
-import { RealtyMoleData } from 'src/realty/types/realty.types';
+import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
 @Controller('listings')
 export class ListingsController {
@@ -17,7 +17,7 @@ export class ListingsController {
     @Body() body: GetPropertyDescriptionDto,
   ): Promise<{
     choices: ChatCompletionResponseMessage[];
-    realtyMoleData: RealtyMoleData;
+    zillowInfo: ZillowPropertyInfo;
   }> {
     const address = body.address;
     const keyInfo = body.keyInfo;
