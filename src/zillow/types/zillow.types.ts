@@ -1,13 +1,15 @@
 export type ZillowPropertyInfo = {
   zpid: number;
   imgSrc: string;
-  zesstimate: number;
-  city: string;
-  state: string;
-  zipCode: string;
-  county: string;
-  neighberhood: string;
-  streetAddress: string;
+  zestimate: number;
+  address: {
+    city: string;
+    state: string;
+    neighberhood: string | null;
+    streetAddress: string;
+    zipcode: string;
+  };
+  county: string | null;
   description: string;
   price: number;
   bedrooms: number;

@@ -38,20 +38,22 @@ export class ListingsService {
     zillowInfo: ZillowPropertyInfo;
   }> {
     const zillowInfo = await this.zillowService.getPropertyInfo({ address });
+    console.log('zillow info', zillowInfo);
+    return;
 
-    if (zillowInfo) {
-      const gptResponse = await this.gptService.generateDescriptionForListing({
-        address,
-        keyInfo,
-        zillowInfo,
-      });
-      if (gptResponse.choices.length > 0) {
-        return {
-          choices: gptResponse.choices.map((content) => content.message),
-          zillowInfo,
-        };
-      }
-    }
+    // if (zillowInfo) {
+    //   const gptResponse = await this.gptService.generateDescriptionForListing({
+    //     address,
+    //     keyInfo,
+    //     zillowInfo,
+    //   });
+    //   if (gptResponse.choices.length > 0) {
+    //     return {
+    //       choices: gptResponse.choices.map((content) => content.message),
+    //       zillowInfo,
+    //     };
+    //   }
+    // }
   }
 
   // private async _getCmaImages(cma: any[]): Promise<SaleListing[]> {

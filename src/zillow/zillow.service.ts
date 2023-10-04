@@ -21,7 +21,7 @@ export class ZillowService {
     const apiUrl = this.configService.get<string>('ZILLOW_API_HOST');
 
     try {
-      const response = await this.httpService.axiosRef.get<any>(
+      const response = await this.httpService.axiosRef.get<ZillowPropertyInfo>(
         `${apiUrl}/property`,
         {
           params: {
@@ -33,7 +33,26 @@ export class ZillowService {
           },
         },
       );
-      return response.data;
+
+      const { data } = response;
+      const zillowInfo: ZillowPropertyInfo = {
+        zpid: data.zpid,
+        imgSrc: data.imgSrc,
+        zestimate: data.zestimate,
+        address: {
+          city: data.address.city,
+          state: data.address.state,
+          neighberhood: data.address.neighberhood,
+          streetAddress: data.address.streetAddress,
+          zipcode: data.address.zipcode,
+        },
+        county: data.county,
+        description: data.description,
+        price: data.price,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+      };
+      return zillowInfo;
     } catch (error) {
       console.log('zillow error:', error);
       throw new HttpException('zillow error', 500);

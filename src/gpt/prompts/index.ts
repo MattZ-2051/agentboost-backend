@@ -5,7 +5,7 @@ import {
 } from '../dto/gpt.dto';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
-export const generalListingProperyDescription = ({
+export const generalListingProperyDescriptionPrompt = ({
   propertyAddress,
   zillowInfo,
   extra,
