@@ -3,17 +3,18 @@ import {
   GenerateListingGmcDto,
   GeneratePropertyInsightDto,
 } from '../dto/gpt.dto';
+import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
 export const generalListingProperyDescription = ({
   propertyAddress,
-  realtyMoleData,
+  zillowInfo,
   extra,
 }: {
   propertyAddress: string;
-  realtyMoleData: RealtyMoleData;
+  zillowInfo: ZillowPropertyInfo;
   extra: string;
 }): string => {
-  const data = realtyMoleData?.[0];
+  const data = zillowInfo?.[0];
   const city = data.city;
   const state = data.state;
   const baths = data.bathrooms;
@@ -49,10 +50,10 @@ export const generateListingPropertyInsightPrompt = ({
 
   let averageDaysOnMarket = 0;
   let averageLotSize = 0;
-  let pricePerFoot = 23;
+  const pricePerFoot = 23;
   let averageSquareFt = 0;
   let averageBedrooms = 0;
-  let daysOld = 24;
+  const daysOld = 24;
 
   for (const item of pool) {
     averageDaysOnMarket += item.daysOnMarket ? item.daysOnMarket : 0;

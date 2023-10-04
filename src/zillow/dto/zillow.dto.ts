@@ -5,3 +5,9 @@ export class GetPropertyImagesDto {
   @IsString()
   address: string;
 }
+
+export class GetPropertyInfoDto {
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+}

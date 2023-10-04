@@ -16,11 +16,14 @@ export class Listing {
   @Column({ nullable: false, unique: true, type: 'varchar' })
   address: string;
 
-  @Column({ nullable: false, type: 'text' })
-  propertyDescription: string;
+  @Column({ nullable: false, type: 'int' })
+  zpid: number;
 
-  @Column({ nullable: false, type: 'text' })
-  propertyInsight: string;
+  @Column({ nullable: false, type: 'int' })
+  price: number;
+
+  @Column({ nullable: false, type: 'varchar' })
+  imgSrc: string;
 
   @Column({ nullable: false, type: 'varchar' })
   city: string;
@@ -32,48 +35,24 @@ export class Listing {
   zipCode: string;
 
   @Column({ nullable: false, type: 'varchar' })
-  formattedAddress: string;
+  streetAddress: string;
+
+  @Column({ nullable: false, type: 'text' })
+  description: string;
 
   @Column({ nullable: false, type: 'int' })
   bedrooms: number;
 
-  @Column({ nullable: true, type: 'varchar', default: '' })
-  county: string;
-
-  @Column({ nullable: true, type: 'varchar', default: '' })
-  legalDescription: string;
-
-  @Column({ nullable: false, type: 'int' })
-  squareFootage: number;
-
-  @Column({ nullable: true, type: 'varchar', default: '' })
-  subdivision: string;
-
-  @Column({ nullable: false, type: 'int' })
-  yearBuilt: number;
-
   @Column({ nullable: false, type: 'float' })
   bathrooms: number;
 
-  @Column({ nullable: false, type: 'int' })
-  lotSize: number;
+  @Column({ nullable: true, type: 'varchar', default: null })
+  county: string;
 
-  @Column({ nullable: false, type: 'varchar' })
-  propertyType: string;
+  @Column({ nullable: true, type: 'varchar', default: null })
+  neighberhood: string;
 
-  @Column({ nullable: true, type: 'varchar', default: '' })
-  lastSaleDate: string;
-
-  @Column({ nullable: false, type: 'json' })
-  features: JSON;
-
-  @Column({ nullable: true, default: '{}', type: 'json' })
-  propertyTaxes: JSON;
-
-  @Column({ nullable: true, default: '{}', type: 'json' })
-  owner: JSON;
-
-  @Column({ nullable: true, default: '[]', type: 'jsonb' })
+  @Column({ nullable: true, default: null, type: 'jsonb' })
   cma: JSON;
 
   @ManyToOne(() => User, (user) => user.listings, { nullable: false })
