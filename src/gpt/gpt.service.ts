@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Configuration, OpenAIApi } from 'openai';
 import { ConfigService } from '@nestjs/config';
 import {
-  generalListingProperyDescription,
+  generalListingProperyDescriptionPrompt,
   generateListingGmc,
   generateListingPropertyInsightPrompt,
 } from './prompts';
@@ -25,7 +25,7 @@ export class GptService {
       apiKey: this.configService.get<string>('GPT_API_KEY'),
     });
     const openai = new OpenAIApi(configuration);
-    const content = generalListingProperyDescription({
+    const content = generalListingProperyDescriptionPrompt({
       zillowInfo,
       propertyAddress: address,
       extra: keyInfo,
