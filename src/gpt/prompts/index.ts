@@ -1,10 +1,16 @@
-import { RealtyMoleData } from 'src/realty/types/realty.types';
 import {
   GenerateListingGmcDto,
   GeneratePropertyInsightDto,
 } from '../dto/gpt.dto';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
+/**
+ *
+ * @param {propertyAddress} - address of property that comes from user
+ * @param {zillowInfo} - info coming from zillow rapid api
+ * @param {extra} - extra info that comes from the user
+ * @returns - prompt to be sent to chat gpt to generate property description for listing
+ */
 export const generalListingProperyDescriptionPrompt = ({
   propertyAddress,
   zillowInfo,
@@ -14,22 +20,13 @@ export const generalListingProperyDescriptionPrompt = ({
   zillowInfo: ZillowPropertyInfo;
   extra: string;
 }): string => {
-  const data = zillowInfo?.[0];
-  const city = data.city;
-  const state = data.state;
-  const baths = data.bathrooms;
-  const beds = data.bedrooms;
-  const floorCount = data.features.garage;
-  const garage = data.features.garage;
-  const garageSpaces = data.features.garageSpaces;
-  const yearBuilt = data.yearBuilt;
-  const squareFootage = data.squareFootage;
-  const propertyType = data.propertyType;
+  const city = zillowInfo.address.city;
+  const state = zillowInfo.address.state;
+  const baths = zillowInfo.bathrooms;
+  const beds = zillowInfo.bedrooms;
+  const description = zillowInfo.description;
 
-  let features = `bathrooms - ${baths}, bedrooms - ${beds}, floors - ${floorCount}, year built - ${yearBuilt}, square footage ${squareFootage}, property type - ${propertyType}`;
-  if (garage) {
-    features += `has a garage with ${garageSpaces} spaces`;
-  }
+  let features = `bathrooms - ${baths}, bedrooms - ${beds}, description - ${description}`;
   const prompt = `Act as a realtor writing a property description from home with the address ${propertyAddress} located in ${city} ${state}.
   Emphasize these features in the description: ${features} and the following extra information ${extra}. Keep the word character count under (1024)`;
 
