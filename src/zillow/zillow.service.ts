@@ -12,7 +12,7 @@ export class ZillowService {
   ) {}
 
   /**
-   * function that handles getting property info from zillow api
+   * function that handles getting property info from zillow api for listings
    * @param dto - dto object containing address to be sent to zillow api
    * @returns the response from https://rapidapi.com/apimaker/api/zillow-com1 /property endpoint
    */
@@ -62,6 +62,12 @@ export class ZillowService {
       throw new HttpException('zillow error', 500);
     }
   }
+
+  /**
+   * function handling property comparable properties for listings
+   * @param zpid - zpid given to property by zillow, should be retrieved previously from getPropertyInfo
+   * @returns - array of comparable properties returned from zillow
+   */
 
   async getPropertyComps(zpid: string): Promise<any[]> {
     const apiKey = this.configService.get<string>('ZILLOW_API_KEY');

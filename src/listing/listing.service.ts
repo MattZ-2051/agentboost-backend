@@ -190,6 +190,8 @@ export class ListingsService {
         dto.zpid.toString(),
       );
 
+      console.log('data', propertyInsightData);
+
       // const propertyInsights = await this.gptService.generatePropertyInsightForListing(
       //   {
       //     pool: propertyInsightData,
@@ -199,24 +201,24 @@ export class ListingsService {
       //     squareFt: dto.
       //   },
       // )
-      const propertyInsight = [];
-      const newListing = this.listingRepo.create({
-        ...dto,
-      });
-      const queryRunner = this.dataSource.createQueryRunner();
-      await queryRunner.startTransaction();
-      try {
-        await queryRunner.manager.save(newListing);
-        await queryRunner.commitTransaction();
-        return newListing;
-      } catch (err) {
-        // since we have errors lets rollback the changes we made
-        await queryRunner.rollbackTransaction();
-        throw new HttpException('error creating new listing', 500);
-      } finally {
-        // you need to release a queryRunner which was manually instantiated
-        await queryRunner.release();
-      }
+      // const propertyInsight = [];
+      // const newListing = this.listingRepo.create({
+      //   ...dto,
+      // });
+      // const queryRunner = this.dataSource.createQueryRunner();
+      // await queryRunner.startTransaction();
+      // try {
+      //   await queryRunner.manager.save(newListing);
+      //   await queryRunner.commitTransaction();
+      //   return newListing;
+      // } catch (err) {
+      //   // since we have errors lets rollback the changes we made
+      //   await queryRunner.rollbackTransaction();
+      //   throw new HttpException('error creating new listing', 500);
+      // } finally {
+      //   // you need to release a queryRunner which was manually instantiated
+      //   await queryRunner.release();
+      // }
     }
   }
 
