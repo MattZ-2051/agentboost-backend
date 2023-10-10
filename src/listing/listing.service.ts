@@ -186,6 +186,20 @@ export class ListingsService {
     if (listing) {
       return listing;
     } else {
+      const propertyInsightData = await this.zillowService.getPropertyComps(
+        dto.zpid.toString(),
+      );
+
+      // const propertyInsights = await this.gptService.generatePropertyInsightForListing(
+      //   {
+      //     pool: propertyInsightData,
+      //     radius: 2,
+      //     bedrooms: dto.bedrooms,
+      //     lotSize: dto.lotSize,
+      //     squareFt: dto.
+      //   },
+      // )
+      const propertyInsight = [];
       const newListing = this.listingRepo.create({
         ...dto,
       });

@@ -51,6 +51,10 @@ export class ZillowService {
         price: data.price,
         bedrooms: data.bedrooms,
         bathrooms: data.bathrooms,
+        resoFacts: {
+          lotSize: data.resoFacts.lotSize,
+          livingArea: data.resoFacts.livingArea,
+        },
       };
       return zillowInfo;
     } catch (error) {
@@ -82,6 +86,5 @@ export class ZillowService {
       console.log('zillow error:', error);
       throw new HttpException('zillow error', 500);
     }
-    return;
   }
 }

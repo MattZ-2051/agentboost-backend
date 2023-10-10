@@ -43,6 +43,9 @@ export class Listing {
   @Column({ nullable: false, type: 'text' })
   propertyInsight: string;
 
+  @Column({ nullable: false, type: 'text' })
+  lotSize: string;
+
   @Column({ nullable: false, type: 'int' })
   bedrooms: number;
 
@@ -64,15 +67,3 @@ export class Listing {
   @OneToMany(() => Gmc, (gmc) => gmc.listing, { nullable: true })
   gmcs: Gmc[];
 }
-
-// @Entity()
-// export class Listing {
-//   @PrimaryGeneratedColumn()
-//   id: number;
-
-//   @Column({ nullable: false, unique: fakse, type: 'varchar' })
-//   img: string;
-
-//   @Column({ nullable: false, unique: fakse, type: 'varchar' })
-//   img: string;
-// }
