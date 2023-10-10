@@ -25,16 +25,32 @@ export class CreateCmaDto {
 
 export class CreateListingDto {
   @IsNotEmpty()
-  @IsString()
-  streetAddress: string;
-
-  @IsNotEmpty()
-  @IsString()
-  propertyDescription: string;
+  @IsNumber()
+  zpid: number;
 
   @IsNotEmpty()
   @IsNumber()
-  zpid: number;
+  price: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  pricePerFoot: number;
+
+  @IsNotEmpty()
+  @IsString()
+  associationFees: string;
+
+  @IsNotEmpty()
+  @IsString()
+  imgSrc: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertyType: string;
+
+  @IsNotEmpty()
+  @IsString()
+  squareFt: string;
 
   @IsNotEmpty()
   @IsString()
@@ -49,22 +65,48 @@ export class CreateListingDto {
   zipCode: string;
 
   @IsNotEmpty()
+  @IsString()
+  streetAddress: string;
+
+  @IsNotEmpty()
+  @IsString()
+  zillowDescription: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertyDescription: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertyInsight: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lotSize: string;
+
+  @IsNotEmpty()
   @IsNumber()
   bedrooms: number;
 
   @IsNotEmpty()
   @IsNumber()
-  price: number;
+  bathrooms: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  yearBuilt: number;
+
+  @IsNumber()
+  garageCount: number;
 
   @IsString()
-  neighberhood: string;
+  subdivision: string;
 
   @IsString()
   county: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  bathrooms: number;
+  @IsJSON()
+  taxHistory: JSON;
 
   @IsNotEmpty()
   @IsString()
