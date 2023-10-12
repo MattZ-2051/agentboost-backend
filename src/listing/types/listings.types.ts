@@ -23,3 +23,14 @@ export type SaleListing = {
   longitude: number;
   zillowImages: string[];
 };
+
+export type Cma = {
+  address: string;
+  bedrooms: number;
+  bathrooms: number;
+  status: string;
+  squareFt: string;
+  price?: number;
+  lotSize?: number;
+  yearBuilt?: number;
+};

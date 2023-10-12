@@ -64,7 +64,7 @@ export class ZillowService {
   }
 
   /**
-   * function handling property comparable properties for listings
+   * function handling property comparable properties for listings from /propertyComps endpoint
    * @param zpid - zpid given to property by zillow, should be retrieved previously from getPropertyInfo
    * @returns - array of comparable properties returned from zillow
    */
@@ -76,6 +76,37 @@ export class ZillowService {
     try {
       const response = await this.httpService.axiosRef.get<any[]>(
         `${apiUrl}/propertyComps`,
+        {
+          params: {
+            zpid,
+          },
+          headers: {
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': 'zillow-com1.p.rapidapi.com',
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('zillow error:', error);
+      throw new HttpException('zillow error', 500);
+    }
+  }
+
+  /**
+   * function that handles getting similar properties that were recently sold from zillow /similarSales endpoint
+   * @param zpid - zpid given to property by zillow, should be retrieved previously from getPropertyInfo
+   * @returns array of similar properties recently sold
+   */
+
+  async getRecentlySold(zpid: string): Promise<any[]> {
+    const apiKey = this.configService.get<string>('ZILLOW_API_KEY');
+    const apiUrl = this.configService.get<string>('ZILLOW_API_HOST');
+
+    try {
+      const response = await this.httpService.axiosRef.get<any[]>(
+        `${apiUrl}/similarSales`,
         {
           params: {
             zpid,
