@@ -16,6 +16,9 @@ import { ZillowModule } from './zillow/zillow.module';
 import { BuyerController } from './buyer/buyer.controller';
 import { BuyerService } from './buyer/buyer.service';
 import { BuyerModule } from './buyer/buyer.module';
+import { GoogleController } from './google/google.controller';
+import { GoogleService } from './google/google.service';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -42,8 +45,9 @@ import { BuyerModule } from './buyer/buyer.module';
     ListingsModule,
     ZillowModule,
     BuyerModule,
+    GoogleModule,
   ],
-  providers: [AppService, ZillowService, BuyerService],
-  controllers: [AppController, ZillowController, BuyerController],
+  providers: [AppService, ZillowService, BuyerService, GoogleService],
+  controllers: [AppController, ZillowController, BuyerController, GoogleController],
 })
 export class AppModule {}

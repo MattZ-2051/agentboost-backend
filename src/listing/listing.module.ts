@@ -7,6 +7,7 @@ import { GptModule } from '../gpt/gpt.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
 import { ZillowModule } from 'src/zillow/zillow.module';
+import { GoogleModule } from 'src/google/google.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ZillowModule } from 'src/zillow/zillow.module';
     UserModule,
     GptModule,
     ZillowModule,
+    GoogleModule,
   ],
   controllers: [ListingsController],
   providers: [ListingsService],

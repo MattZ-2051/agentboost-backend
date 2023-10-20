@@ -52,8 +52,14 @@ export class Listing {
   @Column({ nullable: false, type: 'text' })
   propertyDescription: string;
 
-  @Column({ nullable: false, type: 'text' })
-  propertyInsight: string;
+  @Column({ nullable: false, type: 'jsonb' })
+  nearbyPoi: JSON;
+
+  @Column({ nullable: false, type: 'int' })
+  propertyInsightAvgFt: number;
+
+  @Column({ nullable: false, type: 'int' })
+  propertyInsightAvgPrice: number;
 
   @Column({ nullable: false, type: 'text' })
   lotSize: string;
