@@ -10,12 +10,14 @@ import { UserService } from '../user/user.service';
 import { ZillowService } from 'src/zillow/zillow.service';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 import { Cma } from './types/listings.types';
+import { GoogleService } from 'src/google/google.service';
 
 @Injectable()
 export class ListingsService {
   constructor(
     private readonly gptService: GptService,
     private readonly usersService: UserService,
+    private readonly googleService: GoogleService,
     private readonly zillowService: ZillowService,
     private readonly dataSource: DataSource,
     @InjectRepository(Listing)
@@ -135,6 +137,31 @@ export class ListingsService {
     }
   }
 
+  private async _getPropertyInsightData(
+    data: any[],
+  ): Promise<{ avgPrice: number; avgPricePerSqFt: number }> {
+    let averagePrice = 0;
+    let averagePriceDataLength = 0;
+    let averagePricePerSquareFoot = 0;
+    let averagePricePerSquareFootDataLength = 0;
+    for (const item of data) {
+      if (item?.price) {
+        averagePriceDataLength++;
+        averagePrice += item.price;
+      }
+
+      if (item?.livingArea && item?.price) {
+        const singleAvg = item.price / item.livingArea;
+        averagePricePerSquareFoot += singleAvg;
+        averagePricePerSquareFootDataLength++;
+      }
+    }
+
+    return {
+      avgPrice: averagePrice,
+      avgPricePerSqFt: averagePricePerSquareFoot,
+    };
+  }
   async createListing(dto: CreateListingDto): Promise<Listing> {
     const listing = await this.listingRepo.findOneBy({
       zpid: dto.zpid,
@@ -143,21 +170,20 @@ export class ListingsService {
     if (listing) {
       return listing;
     } else {
-      const propertyInsightData = await this.zillowService.getPropertyComps(
+      const propertyComps = await this.zillowService.getPropertyComps(
         dto.zpid.toString(),
       );
 
-      console.log('data', propertyInsightData);
+      const pointsOfInterestData =
+        await this.googleService.getNearbyPointsOfInterest({
+          latitude: dto.latitude,
+          longitude: dto.longitude,
+        });
 
-      // const propertyInsights = await this.gptService.generatePropertyInsightForListing(
-      //   {
-      //     pool: propertyInsightData,
-      //     radius: 2,
-      //     bedrooms: dto.bedrooms,
-      //     lotSize: dto.lotSize,
-      //     squareFt: dto.
-      //   },
-      // )
+      const propertyInsightData = await this._getPropertyInsightData(
+        propertyComps,
+      );
+
       // const propertyInsight = [];
       // const newListing = this.listingRepo.create({
       //   ...dto,

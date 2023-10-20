@@ -23,6 +23,14 @@ export class CreateListingDto {
 
   @IsNotEmpty()
   @IsNumber()
+  latitude: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  longitude: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   price: number;
 
   @IsNotEmpty()
@@ -70,8 +78,16 @@ export class CreateListingDto {
   propertyDescription: string;
 
   @IsNotEmpty()
-  @IsString()
-  propertyInsight: string;
+  @IsJSON()
+  nearbyPoi: JSON;
+
+  @IsNotEmpty()
+  @IsNumber()
+  propertyInsightAvgFt: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  propertyInsightAvgPrice: string;
 
   @IsNotEmpty()
   @IsString()
