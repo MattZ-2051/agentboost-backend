@@ -19,7 +19,7 @@ export class GoogleService {
           radius: 5000,
         },
       });
-      return response.data;
+      return response.data.results;
     } catch (err) {
       console.log('error', err);
       throw new HttpException('google places api error', 500);
