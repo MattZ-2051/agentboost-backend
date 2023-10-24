@@ -33,11 +33,9 @@ export class CreateListingDto {
   @IsNumber()
   price: number;
 
-  @IsNotEmpty()
   @IsNumber()
   pricePerFoot: number;
 
-  @IsNotEmpty()
   @IsString()
   associationFees: string;
 
@@ -78,18 +76,6 @@ export class CreateListingDto {
   propertyDescription: string;
 
   @IsNotEmpty()
-  @IsJSON()
-  nearbyPoi: JSON;
-
-  @IsNotEmpty()
-  @IsNumber()
-  propertyInsightAvgFt: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  propertyInsightAvgPrice: string;
-
-  @IsNotEmpty()
   @IsString()
   lotSize: string;
 
@@ -105,17 +91,11 @@ export class CreateListingDto {
   @IsNumber()
   yearBuilt: number;
 
-  @IsNumber()
-  garageCount: number;
-
   @IsString()
   subdivision: string;
 
   @IsString()
   county: string;
-
-  @IsJSON()
-  taxHistory: JSON;
 
   @IsNotEmpty()
   @IsString()

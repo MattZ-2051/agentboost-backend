@@ -19,10 +19,10 @@ export class Listing {
   @Column({ nullable: false, type: 'int' })
   price: number;
 
-  @Column({ nullable: false, type: 'int' })
+  @Column({ nullable: true, type: 'float' })
   pricePerFoot: number;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: true, type: 'varchar' })
   associationFees: string;
 
   @Column({ nullable: false, type: 'varchar' })
@@ -81,9 +81,6 @@ export class Listing {
 
   @Column({ nullable: true, type: 'varchar', default: null })
   subdivision: string;
-
-  @Column({ nullable: true, type: 'jsonb' })
-  taxHistory: JSON;
 
   @Column({ nullable: true, default: null, type: 'jsonb' })
   cma: JSON;

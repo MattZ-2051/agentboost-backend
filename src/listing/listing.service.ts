@@ -139,34 +139,43 @@ export class ListingsService {
 
   private async _getPropertyInsightData(
     data: any[],
-  ): Promise<{ avgPrice: number; avgPricePerSqFt: number }> {
+  ): Promise<{ avgPrice: number; avgPricePerSqFt: number; avgSqFt: number }> {
     let averagePrice = 0;
     let averagePriceDataLength = 0;
     let averagePricePerSquareFoot = 0;
     let averagePricePerSquareFootDataLength = 0;
+    let averageSquareFoot = 0;
+    let averageSquareFootDataLength = 0;
     for (const item of data) {
       if (item?.price) {
         averagePriceDataLength++;
         averagePrice += item.price;
       }
 
-      if (item?.livingArea && item?.price) {
-        const singleAvg = item.price / item.livingArea;
+      if (item?.lotSize && item?.price) {
+        const singleAvg = item.price / item.lotSize;
         averagePricePerSquareFoot += singleAvg;
+        averagePricePerSquareFootDataLength++;
+      }
+
+      if (item?.lotSize) {
+        averageSquareFoot += item.lotSize;
         averagePricePerSquareFootDataLength++;
       }
     }
 
     return {
-      avgPrice: averagePrice,
-      avgPricePerSqFt: averagePricePerSquareFoot,
+      avgPrice: averagePrice / averagePriceDataLength,
+      avgPricePerSqFt:
+        averagePricePerSquareFoot / averagePricePerSquareFootDataLength,
+      avgSqFt: averageSquareFoot,
     };
   }
   async createListing(dto: CreateListingDto): Promise<Listing> {
     const listing = await this.listingRepo.findOneBy({
       zpid: dto.zpid,
     });
-
+    const user = await this.usersService.findOne('id', dto.userId);
     if (listing) {
       return listing;
     } else {
@@ -184,24 +193,28 @@ export class ListingsService {
         propertyComps,
       );
 
-      // const propertyInsight = [];
-      // const newListing = this.listingRepo.create({
-      //   ...dto,
-      // });
-      // const queryRunner = this.dataSource.createQueryRunner();
-      // await queryRunner.startTransaction();
-      // try {
-      //   await queryRunner.manager.save(newListing);
-      //   await queryRunner.commitTransaction();
-      //   return newListing;
-      // } catch (err) {
-      //   // since we have errors lets rollback the changes we made
-      //   await queryRunner.rollbackTransaction();
-      //   throw new HttpException('error creating new listing', 500);
-      // } finally {
-      //   // you need to release a queryRunner which was manually instantiated
-      //   await queryRunner.release();
-      // }
+      const newListing = this.listingRepo.create({
+        ...dto,
+        nearbyPoi: JSON.parse(JSON.stringify(pointsOfInterestData)),
+        propertyInsightAvgFt: propertyInsightData.avgSqFt,
+        propertyInsightAvgPrice: propertyInsightData.avgPrice,
+        user,
+      });
+
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.startTransaction();
+      try {
+        await queryRunner.manager.save(newListing);
+        await queryRunner.commitTransaction();
+        return newListing;
+      } catch (err) {
+        console.log('error creating listing', err);
+        // since we have errors lets rollback the changes we made
+        await queryRunner.rollbackTransaction();
+      } finally {
+        // you need to release a queryRunner which was manually instantiated
+        await queryRunner.release();
+      }
     }
   }
 

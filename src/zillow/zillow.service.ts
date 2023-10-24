@@ -74,7 +74,7 @@ export class ZillowService {
     const apiUrl = this.configService.get<string>('ZILLOW_API_HOST');
 
     try {
-      const response = await this.httpService.axiosRef.get<any[]>(
+      const response = await this.httpService.axiosRef.get<{ comps: any[] }>(
         `${apiUrl}/propertyComps`,
         {
           params: {
@@ -87,7 +87,7 @@ export class ZillowService {
         },
       );
 
-      return response.data;
+      return response.data.comps;
     } catch (error) {
       console.log('zillow error:', error);
       throw new HttpException('zillow error', 500);

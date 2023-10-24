@@ -43,7 +43,7 @@ export class ListingsController {
     );
   }
 
-  @UseGuards(AtGuard)
+  // @UseGuards(AtGuard)
   @Post('/create')
   async createListing(
     @Body() createListingDto: CreateListingDto,
