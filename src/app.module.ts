@@ -19,6 +19,8 @@ import { BuyerModule } from './buyer/buyer.module';
 import { GoogleController } from './google/google.controller';
 import { GoogleService } from './google/google.service';
 import { GoogleModule } from './google/google.module';
+import { FacebookService } from './facebook/facebook.service';
+import { FacebookModule } from './facebook/facebook.module';
 
 @Module({
   imports: [
@@ -46,8 +48,9 @@ import { GoogleModule } from './google/google.module';
     ZillowModule,
     BuyerModule,
     GoogleModule,
+    FacebookModule,
   ],
-  providers: [AppService, ZillowService, BuyerService, GoogleService],
+  providers: [AppService, ZillowService, BuyerService, GoogleService, FacebookService],
   controllers: [AppController, ZillowController, BuyerController, GoogleController],
 })
 export class AppModule {}
