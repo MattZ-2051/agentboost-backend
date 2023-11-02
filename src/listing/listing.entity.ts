@@ -13,7 +13,7 @@ export class Listing {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, type: 'int' })
+  @Column({ nullable: true, type: 'int' })
   zpid: number;
 
   @Column({ nullable: false, type: 'int' })
