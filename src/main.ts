@@ -9,6 +9,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       'https://agentboost-frontend-dev.vercel.app',
+      'https://agentboost-frontend-dev.vercel.app/',
       'https://agentboost-api-dev.up.railway.app',
     ],
   });
