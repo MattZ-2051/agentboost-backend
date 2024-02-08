@@ -26,7 +26,7 @@ import { FacebookModule } from './facebook/facebook.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: `env.development`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -50,7 +50,18 @@ import { FacebookModule } from './facebook/facebook.module';
     GoogleModule,
     FacebookModule,
   ],
-  providers: [AppService, ZillowService, BuyerService, GoogleService, FacebookService],
-  controllers: [AppController, ZillowController, BuyerController, GoogleController],
+  providers: [
+    AppService,
+    ZillowService,
+    BuyerService,
+    GoogleService,
+    FacebookService,
+  ],
+  controllers: [
+    AppController,
+    ZillowController,
+    BuyerController,
+    GoogleController,
+  ],
 })
 export class AppModule {}

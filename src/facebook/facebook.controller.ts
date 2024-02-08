@@ -1,4 +1,6 @@
 import { Controller } from '@nestjs/common';
 
 @Controller('facebook')
-export class FacebookController {}
+export class FacebookController {
+  constructor() {}
+}
