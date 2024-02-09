@@ -37,7 +37,10 @@ export class AuthService {
     const user = await this.usersService.createUser({
       email: dto.email,
       password: passwordHash,
+      fullName: dto.fullName,
     });
+
+    console.log('user', user);
     if (user) {
       const tokens = await this.getTokens(user.id, user.email);
       await this.usersService.updateRtHash(user.id, tokens.refresh);

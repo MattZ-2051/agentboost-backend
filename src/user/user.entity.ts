@@ -10,6 +10,9 @@ export class User {
   @Column({ nullable: false, unique: true, type: 'varchar' })
   email: string;
 
+  @Column({ nullable: false, unique: false, type: 'varchar' })
+  fullName: string;
+
   @Column({ nullable: true, type: 'text', default: '' })
   brandDescription: string;
 

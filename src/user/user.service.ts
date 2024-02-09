@@ -68,7 +68,11 @@ export class UserService {
     }
   }
 
-  async createUser({ email, password }: CreateUserDto): Promise<User | void> {
+  async createUser({
+    email,
+    password,
+    fullName,
+  }: CreateUserDto): Promise<User | void> {
     const userExists = await this.userRepo.findOneBy({ email });
     if (userExists) {
       throw new HttpException('Username already exists.', 409);
@@ -79,6 +83,7 @@ export class UserService {
     const user = await this.userRepo.create({
       email,
       password,
+      fullName,
     });
 
     try {

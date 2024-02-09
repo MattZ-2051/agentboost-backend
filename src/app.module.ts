@@ -26,7 +26,7 @@ import { FacebookModule } from './facebook/facebook.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env`,
+      envFilePath: `.env.development`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
