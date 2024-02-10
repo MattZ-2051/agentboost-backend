@@ -84,6 +84,17 @@ export class AuthService {
     return tokens;
   }
 
+  googleLogin(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
+  }
+
   async updateRtHash(userId: number, rt: string): Promise<void> {
     const hash = await argon.hash(rt);
     await this.usersService.updateRtHash(userId, hash);

@@ -1,4 +1,11 @@
-import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+  Get,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { CreateUserDto } from './dto/auth.dto';
@@ -6,6 +13,7 @@ import { Tokens } from './types/auth.types';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RtGuard } from './guards/auth.jwt-rt.guard';
 import { AtGuard } from './guards/auth.jwt-auth.guard';
+import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +24,16 @@ export class AuthController {
   @Post('login')
   async login(@Request() req): Promise<Tokens> {
     return await this.authService.login(req.user);
+  }
+
+  @Get()
+  @UseGuards(GoogleOAuthGuard)
+  async googleAuth(@Request() req) {}
+
+  @Get('google-redirect')
+  @UseGuards(GoogleOAuthGuard)
+  googleAuthRedirect(@Request() req) {
+    return this.authService.googleLogin(req);
   }
 
   @Public()

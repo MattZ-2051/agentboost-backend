@@ -42,3 +42,5 @@ backend.zip
 
 .env*
 env.*
+
+package-lock.json
