@@ -13,6 +13,9 @@ export class User {
   @Column({ nullable: false, unique: false, type: 'varchar' })
   fullName: string;
 
+  @Column({ nullable: true, unique: false, type: 'varchar' })
+  profileImg: string;
+
   @Column({ nullable: true, type: 'text', default: '' })
   brandDescription: string;
 
@@ -20,7 +23,7 @@ export class User {
   areaOfExpertise: string;
 
   @Exclude()
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: true, type: 'varchar' })
   password: string;
 
   @Exclude()

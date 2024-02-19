@@ -75,7 +75,7 @@ export class UserService {
   }: CreateUserDto): Promise<User | void> {
     const userExists = await this.userRepo.findOneBy({ email });
     if (userExists) {
-      throw new HttpException('Username already exists.', 409);
+      throw new HttpException('Email already exists.', 409);
     }
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -99,6 +99,36 @@ export class UserService {
     }
   }
 
+  async createUserFromGoogle({
+    email,
+    fullName,
+    profileImg,
+  }: CreateUserDto): Promise<User> {
+    const userExists = await this.userRepo.findOneBy({ email });
+    if (userExists) {
+      return userExists;
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+    const user = await this.userRepo.create({
+      email,
+      fullName,
+      profileImg,
+    });
+
+    try {
+      await queryRunner.manager.save(user);
+      await queryRunner.commitTransaction();
+      return user;
+    } catch (err) {
+      // since we have errors lets rollback the changes we made
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      await queryRunner.release();
+    }
+  }
   /**
    *
    * @param userId - id of user in db

@@ -9,7 +9,9 @@ export class CreateUserDto {
   @IsString()
   fullName: string;
 
-  @IsNotEmpty()
   @IsString()
-  password: string;
+  password?: string;
+
+  @IsString()
+  profileImg?: string;
 }

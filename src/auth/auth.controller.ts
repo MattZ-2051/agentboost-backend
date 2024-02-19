@@ -5,6 +5,8 @@ import {
   Request,
   Body,
   Get,
+  Redirect,
+  Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
@@ -26,14 +28,19 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
-  @Get()
+  @Public()
   @UseGuards(GoogleOAuthGuard)
-  async googleAuth(@Request() req) {}
+  @Get('google-login')
+  async googleAuth(@Request() req) {
+    return { msg: 'Google Authentication' };
+  }
 
-  @Get('google-redirect')
+  @Public()
   @UseGuards(GoogleOAuthGuard)
-  googleAuthRedirect(@Request() req) {
-    return this.authService.googleLogin(req);
+  @Get('google-redirect')
+  @Redirect()
+  async googleAuthRedirect(@Request() req, @Response() res) {
+    return await this.authService.googleRedirect(req, res);
   }
 
   @Public()

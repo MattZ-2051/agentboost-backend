@@ -1,10 +1,15 @@
 import * as argon from 'argon2';
-import { Injectable, HttpException } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { User, JwtPayload, Tokens } from './types/auth.types';
+import { User, JwtPayload, Tokens, GoogleUser } from './types/auth.types';
 import { CreateUserDto } from './dto/auth.dto';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -33,14 +38,22 @@ export class AuthService {
   }
 
   async signup(dto: CreateUserDto): Promise<Tokens> {
-    const passwordHash = await argon.hash(dto.password);
-    const user = await this.usersService.createUser({
-      email: dto.email,
-      password: passwordHash,
-      fullName: dto.fullName,
-    });
+    let user;
+    if (dto.password) {
+      const passwordHash = await argon.hash(dto.password);
+      user = await this.usersService.createUser({
+        email: dto.email,
+        password: passwordHash,
+        fullName: dto.fullName,
+      });
+    } else {
+      user = await this.usersService.createUserFromGoogle({
+        email: dto.email,
+        fullName: dto.fullName,
+        profileImg: dto.profileImg,
+      });
+    }
 
-    console.log('user', user);
     if (user) {
       const tokens = await this.getTokens(user.id, user.email);
       await this.usersService.updateRtHash(user.id, tokens.refresh);
@@ -84,15 +97,29 @@ export class AuthService {
     return tokens;
   }
 
-  googleLogin(req) {
+  public async googleRedirect(
+    req: Request,
+    res: Response,
+  ): Promise<{ url: string }> {
     if (!req.user) {
-      return 'No user from google';
+      throw new UnauthorizedException('user not found');
     }
 
+    const { user } = req;
+
+    await this.googleLogin(user as GoogleUser);
     return {
-      message: 'User information from google',
-      user: req.user,
+      url: 'http://localhost:3000/dashboard',
     };
+  }
+
+  private async googleLogin(user: GoogleUser): Promise<Tokens> {
+    const googleUser = await this.signup({
+      email: user.email,
+      fullName: user.fullName,
+      profileImg: user.picture,
+    });
+    return googleUser;
   }
 
   async updateRtHash(userId: number, rt: string): Promise<void> {

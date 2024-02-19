@@ -1,8 +1,8 @@
-export interface User {
+export type User = {
   id: number;
   email: string;
   rtHash: string | null;
-}
+};
 
 export type Tokens = {
   access: string;
@@ -15,3 +15,9 @@ export type JwtPayload = {
 };
 
 export type JwtPayloadWithRt = JwtPayload & { refreshToken: string };
+
+export type GoogleUser = {
+  email: string;
+  fullName: string;
+  picture: string;
+};

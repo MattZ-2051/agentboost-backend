@@ -8,6 +8,8 @@ import { LocalStrategy } from './strategies/auth.local.strategy';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/auth.at-jwt.strategy';
 import { RtStrategy } from './strategies/auth.rt-jwt.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { RtStrategy } from './strategies/auth.rt-jwt.strategy';
     JwtModule,
     PassportModule,
     ConfigModule,
+    CacheModule.register(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
@@ -29,7 +32,13 @@ import { RtStrategy } from './strategies/auth.rt-jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, RtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    RtStrategy,
+    GoogleStrategy,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
