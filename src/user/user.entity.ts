@@ -23,7 +23,7 @@ export class User {
   areaOfExpertise: string;
 
   @Exclude()
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true, type: 'varchar', default: '' })
   password: string;
 
   @Exclude()

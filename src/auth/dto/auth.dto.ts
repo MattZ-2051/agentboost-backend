@@ -10,7 +10,7 @@ export class CreateUserDto {
   fullName: string;
 
   @IsString()
-  password?: string;
+  password: string;
 
   @IsString()
   profileImg?: string;

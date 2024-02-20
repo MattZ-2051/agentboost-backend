@@ -32,6 +32,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<Tokens> {
+    console.log('here');
     const tokens = await this.getTokens(user.id, user.email);
     await this.usersService.updateRtHash(user.id, tokens.refresh);
     return tokens;
@@ -39,7 +40,7 @@ export class AuthService {
 
   async signup(dto: CreateUserDto): Promise<Tokens> {
     let user;
-    if (dto.password) {
+    if (dto.password.length) {
       const passwordHash = await argon.hash(dto.password);
       user = await this.usersService.createUser({
         email: dto.email,
@@ -51,6 +52,7 @@ export class AuthService {
         email: dto.email,
         fullName: dto.fullName,
         profileImg: dto.profileImg,
+        password: '',
       });
     }
 
@@ -105,11 +107,14 @@ export class AuthService {
       throw new UnauthorizedException('user not found');
     }
 
+    //TODO: fix login so its more secure
+
     const { user } = req;
 
-    await this.googleLogin(user as GoogleUser);
+    const goolgeUser = user as GoogleUser;
+    await this.googleLogin(goolgeUser);
     return {
-      url: 'http://localhost:3000/dashboard',
+      url: `http://localhost:3000/google-oauth-success-redirect${req.url}&user-email=${goolgeUser.email}`,
     };
   }
 
@@ -117,6 +122,7 @@ export class AuthService {
     const googleUser = await this.signup({
       email: user.email,
       fullName: user.fullName,
+      password: '',
       profileImg: user.picture,
     });
     return googleUser;
