@@ -32,7 +32,6 @@ export class AuthService {
   }
 
   async login(user: User): Promise<Tokens> {
-    console.log('here');
     const tokens = await this.getTokens(user.id, user.email);
     await this.usersService.updateRtHash(user.id, tokens.refresh);
     return tokens;
@@ -40,20 +39,17 @@ export class AuthService {
 
   async signup(dto: CreateUserDto): Promise<Tokens> {
     let user;
-    if (dto.password.length) {
-      const passwordHash = await argon.hash(dto.password);
-      user = await this.usersService.createUser({
-        email: dto.email,
-        password: passwordHash,
-        fullName: dto.fullName,
-      });
+    const passwordHash = await argon.hash(dto.password);
+    const userInfo = {
+      email: dto.email,
+      password: passwordHash,
+      fullName: dto.fullName,
+      profileImg: dto.profileImg,
+    };
+    if (dto.password === 'google') {
+      user = await this.usersService.createGoogleUser(userInfo);
     } else {
-      user = await this.usersService.createUserFromGoogle({
-        email: dto.email,
-        fullName: dto.fullName,
-        profileImg: dto.profileImg,
-        password: '',
-      });
+      user = await this.usersService.createUser(userInfo);
     }
 
     if (user) {
@@ -111,10 +107,10 @@ export class AuthService {
 
     const { user } = req;
 
-    const goolgeUser = user as GoogleUser;
-    await this.googleLogin(goolgeUser);
+    const googleUser = user as GoogleUser;
+    await this.googleLogin(googleUser);
     return {
-      url: `http://localhost:3000/google-oauth-success-redirect${req.url}&user-email=${goolgeUser.email}`,
+      url: `http://localhost:3000/google-oauth-success-redirect${req.url}&user-email=${googleUser.email}`,
     };
   }
 
@@ -122,7 +118,7 @@ export class AuthService {
     const googleUser = await this.signup({
       email: user.email,
       fullName: user.fullName,
-      password: '',
+      password: 'google',
       profileImg: user.picture,
     });
     return googleUser;
