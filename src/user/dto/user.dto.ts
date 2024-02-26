@@ -3,9 +3,11 @@ import { Exclude } from 'class-transformer';
 export class GetUserDto {
   id: number;
   email: string;
-  brandDescription?: string;
-  areaOfExpertise?: string;
-
+  brandDescription: string;
+  areaOfExpertise: string;
+  instagram: boolean;
+  facebook: boolean;
+  x: boolean;
   @Exclude()
   password;
   rtHash;

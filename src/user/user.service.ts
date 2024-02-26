@@ -20,7 +20,7 @@ export class UserService {
   async findOne(key: string, val: string | number): Promise<User> {
     return this.userRepo.findOne({
       where: { [key]: val },
-      relations: ['listings'],
+      relations: ['listings', 'buyers', 'campaigns'],
     });
   }
 

@@ -21,6 +21,7 @@ import { GoogleService } from './google/google.service';
 import { GoogleModule } from './google/google.module';
 import { FacebookService } from './facebook/facebook.service';
 import { FacebookModule } from './facebook/facebook.module';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { FacebookModule } from './facebook/facebook.module';
     BuyerModule,
     GoogleModule,
     FacebookModule,
+    CampaignModule,
   ],
   providers: [
     AppService,
