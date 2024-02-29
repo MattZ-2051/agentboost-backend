@@ -44,3 +44,4 @@ backend.zip
 env.*
 
 package-lock.json
+key.json

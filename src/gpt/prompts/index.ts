@@ -26,7 +26,7 @@ export const generalListingProperyDescriptionPrompt = ({
   const beds = zillowInfo.bedrooms;
   const description = zillowInfo.description;
 
-  let features = `bathrooms - ${baths}, bedrooms - ${beds}, description - ${description}`;
+  const features = `bathrooms - ${baths}, bedrooms - ${beds}, description - ${description}`;
   const prompt = `Act as a realtor writing a property description from home with the address ${propertyAddress} located in ${city} ${state}.
   Emphasize these features in the description: ${features} and the following extra information ${extra}. Keep the word character count under (1024)`;
 

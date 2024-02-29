@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from 'src/auth/dto/auth.dto';
-import { UpdateUserDto } from './dto/user.dto';
+import { UpdateUserDto, UpdateUserPasswordDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -28,34 +28,24 @@ export class UserService {
     return 'return all users!';
   }
 
-  /**
-   * @param {email} - existing email of user to find them by
-   * @param {areaOfExpertise} - new area of expertise
-   * @param {brandDescription} - new user brand description
-   * @returns - update user object from db
-   */
-  async updateUser({
+  async updatePassword({
     email,
-    areaOfExpertise,
-    brandDescription,
-  }: UpdateUserDto): Promise<User> {
-    const userExists = await this.userRepo.findOneBy({ email });
-    if (!userExists) {
-      throw new HttpException('User does not exist', 400);
-    }
+    newPassword,
+  }: UpdateUserPasswordDto): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
-
     const user = await this.userRepo.update(
       { email },
-      { email, areaOfExpertise, brandDescription },
+      { password: newPassword },
     );
+
+    console.log('user', user, email);
     if (user.affected === 1) {
-      const updatedUser = await this.userRepo.findOneBy({ email });
+      const newUser = await this.userRepo.findOneBy({ email });
       try {
-        await queryRunner.manager.save(updatedUser);
+        await queryRunner.manager.save(newUser);
         await queryRunner.commitTransaction();
-        return updatedUser;
+        return;
       } catch (err) {
         // since we have errors lets rollback the changes we made
         await queryRunner.rollbackTransaction();
@@ -64,7 +54,36 @@ export class UserService {
         await queryRunner.release();
       }
     } else {
-      throw new HttpException('Error logging user out', 500);
+      throw new HttpException('Error resetting password', 500);
+    }
+  }
+
+  async updateUser(dto: UpdateUserDto): Promise<User> {
+    const { id } = dto;
+    const userExists = await this.userRepo.findOneBy({ id });
+    if (!userExists) {
+      throw new HttpException('User does not exist', 400);
+    }
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+
+    const user = await this.userRepo.update({ id }, { ...dto });
+
+    if (user.affected === 1) {
+      const newUser = await this.userRepo.findOneBy({ id });
+      try {
+        await queryRunner.manager.save(newUser);
+        await queryRunner.commitTransaction();
+        return newUser;
+      } catch (err) {
+        // since we have errors lets rollback the changes we made
+        await queryRunner.rollbackTransaction();
+      } finally {
+        // you need to release a queryRunner which was manually instantiated
+        await queryRunner.release();
+      }
+    } else {
+      throw new HttpException('Error updating user', 500);
     }
   }
 

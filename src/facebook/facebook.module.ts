@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { FacebookController } from './facebook.controller';
 
 @Module({
-  controllers: [FacebookController]
+  controllers: [FacebookController],
 })
 export class FacebookModule {}

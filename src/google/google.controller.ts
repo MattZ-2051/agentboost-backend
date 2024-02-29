@@ -1,6 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GoogleService } from './google.service';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { AtGuard } from 'src/auth/guards/auth.jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('google')
 export class GoogleController {
@@ -14,4 +22,14 @@ export class GoogleController {
   //     longitude: -122.34212,
   //   });
   // }
+
+  @UseGuards(AtGuard)
+  @Post('/bucket/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadToBucket(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() dto,
+  ): Promise<{ data: string }> {
+    return await this.googleService.uploadToBucket(dto, file);
+  }
 }

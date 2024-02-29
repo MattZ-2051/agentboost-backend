@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class GetUserDto {
   id: number;
@@ -14,7 +15,29 @@ export class GetUserDto {
 }
 
 export class UpdateUserDto {
-  email?: string;
+  id: number;
+
+  @IsString()
   brandDescription?: string;
-  areaOfExpertise?: string;
+
+  @IsString()
+  profileImg?: string;
+
+  businessLogo?: string;
+
+  @IsString()
+  fullName?: string;
+
+  @IsString()
+  brokerage?: string;
+}
+
+export class UpdateUserPasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
 }
