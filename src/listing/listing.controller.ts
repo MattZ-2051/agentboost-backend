@@ -12,7 +12,7 @@ export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 
   @UseGuards(AtGuard)
-  @Post('/descriptionfromAddress')
+  @Post('/create/property-description')
   async generateListingPropertyDescription(
     @Body() body: GetPropertyDescriptionDto,
   ): Promise<{

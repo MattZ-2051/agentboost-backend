@@ -11,24 +11,22 @@ import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
  * @param {extra} - extra info that comes from the user
  * @returns - prompt to be sent to chat gpt to generate property description for listing
  */
-export const generalListingProperyDescriptionPrompt = ({
+export const generateListingProperyDescriptionPrompt = ({
   propertyAddress,
   zillowInfo,
-  extra,
+  brandDescription,
+  keyInfo,
 }: {
   propertyAddress: string;
   zillowInfo: ZillowPropertyInfo;
-  extra: string;
+  brandDescription: string;
+  keyInfo: string;
 }): string => {
   const city = zillowInfo.address.city;
   const state = zillowInfo.address.state;
-  const baths = zillowInfo.bathrooms;
-  const beds = zillowInfo.bedrooms;
-  const description = zillowInfo.description;
-
-  const features = `bathrooms - ${baths}, bedrooms - ${beds}, description - ${description}`;
-  const prompt = `Act as a realtor writing a property description from home with the address ${propertyAddress} located in ${city} ${state}.
-  Emphasize these features in the description: ${features} and the following extra information ${extra}. Keep the word character count under (1024)`;
+  const prompt = `Act as a realtor who is ${brandDescription} writing a property description from home with the address
+                  ${propertyAddress} located in ${city},${state}. This home has these features: (bed, bath, count). Empghasize these features
+                  in the description: ${keyInfo}. Keep the word character count under 1024. Make the result one continuous paragraph.`;
 
   return prompt;
 };
