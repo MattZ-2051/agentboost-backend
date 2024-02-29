@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { File } from '../types';
 
-export class GetNearbyPOIs {
+export class GetNearbyPoiDto {
   @IsNotEmpty()
   @IsString()
   latitude;
@@ -8,4 +9,13 @@ export class GetNearbyPOIs {
   @IsNotEmpty()
   @IsString()
   longitude;
+}
+
+export class UploadGoogleFileDto {
+  @IsNotEmpty()
+  file: File;
+
+  @IsNotEmpty()
+  @IsString()
+  filePath: string;
 }

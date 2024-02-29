@@ -8,7 +8,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User, JwtPayload, Tokens, GoogleUser } from './types/auth.types';
-import { CreateUserDto } from './dto/auth.dto';
+import { CreateUserDto, ResetPasswordDto } from './dto/auth.dto';
 import { Request, Response } from 'express';
 
 @Injectable()
@@ -37,6 +37,17 @@ export class AuthService {
     return tokens;
   }
 
+  async resetPassword({
+    email,
+    currentPassword,
+    newPassword,
+  }: ResetPasswordDto): Promise<void> {
+    if (await this.validateUser(email, currentPassword)) {
+      return await this.usersService.updatePassword({ email, newPassword });
+    } else {
+      throw new HttpException('Password is not correct', 400);
+    }
+  }
   async signup(dto: CreateUserDto): Promise<Tokens> {
     let user;
     const passwordHash = await argon.hash(dto.password);

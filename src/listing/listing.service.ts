@@ -145,7 +145,7 @@ export class ListingsService {
     let averagePricePerSquareFoot = 0;
     let averagePricePerSquareFootDataLength = 0;
     let averageSquareFoot = 0;
-    let averageSquareFootDataLength = 0;
+    const averageSquareFootDataLength = 0;
     for (const item of data) {
       if (item?.price) {
         averagePriceDataLength++;

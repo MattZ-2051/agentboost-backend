@@ -15,3 +15,17 @@ export class CreateUserDto {
   @IsString()
   profileImg?: string;
 }
+
+export class ResetPasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  currentPassword: string;
+
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
+}

@@ -7,10 +7,11 @@ import {
   Get,
   Redirect,
   Response,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
-import { CreateUserDto } from './dto/auth.dto';
+import { CreateUserDto, ResetPasswordDto } from './dto/auth.dto';
 import { Tokens } from './types/auth.types';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RtGuard } from './guards/auth.jwt-rt.guard';
@@ -26,6 +27,13 @@ export class AuthController {
   @Post('login')
   async login(@Request() req): Promise<Tokens> {
     return await this.authService.login(req.user);
+  }
+
+  @Public()
+  @UseGuards(AtGuard)
+  @Patch('password/reset')
+  async resetPassword(@Body() dto: ResetPasswordDto): Promise<void> {
+    return await this.authService.resetPassword(dto);
   }
 
   @Public()
