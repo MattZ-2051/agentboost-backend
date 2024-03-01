@@ -6,13 +6,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { GoogleService } from './google.service';
+import { GoogleStorageService } from './google-storage.service';
 import { AtGuard } from 'src/auth/guards/auth.jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('google')
-export class GoogleController {
-  constructor(private readonly googleService: GoogleService) {}
+@Controller('google-storage')
+export class GoogleStorageController {
+  constructor(private readonly storageService: GoogleStorageService) {}
 
   // @Public()
   // @Post('test')
@@ -30,6 +30,6 @@ export class GoogleController {
     @UploadedFile() file: Express.Multer.File,
     @Body() dto,
   ): Promise<{ data: string }> {
-    return await this.googleService.uploadToBucket(dto, file);
+    return await this.storageService.uploadToBucket(dto, file);
   }
 }

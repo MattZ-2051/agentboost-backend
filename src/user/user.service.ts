@@ -39,7 +39,6 @@ export class UserService {
       { password: newPassword },
     );
 
-    console.log('user', user, email);
     if (user.affected === 1) {
       const newUser = await this.userRepo.findOneBy({ email });
       try {

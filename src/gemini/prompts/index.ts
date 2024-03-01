@@ -1,7 +1,7 @@
 import {
   GenerateListingGmcDto,
   GeneratePropertyInsightDto,
-} from '../dto/gpt.dto';
+} from '../dto/gemini.dto';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 
 /**

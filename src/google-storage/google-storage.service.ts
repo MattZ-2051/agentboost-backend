@@ -1,36 +1,18 @@
 import { HttpException, Injectable, BadRequestException } from '@nestjs/common';
-import { Client, LatLng } from '@googlemaps/google-maps-services-js';
 import { ConfigService } from '@nestjs/config';
-import { GetNearbyPoiDto, UploadGoogleFileDto } from './dto/google.dto';
+import { UploadGoogleFileDto } from './dto/google-storage.dto';
+import { Client, LatLng } from '@googlemaps/google-maps-services-js';
 import { Bucket, Storage } from '@google-cloud/storage';
 import { parse } from 'path';
 import { File } from './types';
 
 @Injectable()
-export class GoogleService {
+export class GoogleStorageService {
   constructor(private readonly configService: ConfigService) {
     this.storage = new Storage({
       keyFilename: 'src/google/storage/key.json',
     });
     this.bucket = this.storage.bucket('agentboost-dev');
-  }
-
-  async getNearbyPointsOfInterest(dto: GetNearbyPoiDto): Promise<any> {
-    const client = new Client();
-
-    const apiKey = this.configService.get('GOOGLE_API_KEY');
-    try {
-      const response = await client.placesNearby({
-        params: {
-          location: { lat: dto.latitude, lng: dto.longitude },
-          key: apiKey,
-          radius: 5000,
-        },
-      });
-      return response.data.results;
-    } catch (err) {
-      throw new HttpException('google places api error', 500);
-    }
   }
 
   private bucket: Bucket;

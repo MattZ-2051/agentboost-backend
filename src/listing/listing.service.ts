@@ -2,7 +2,7 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetPropertyDescriptionDto } from './dto/listings.dto';
-import { GptService } from '../gpt/gpt.service';
+import { GeminiService } from 'src/gemini/gemini.service';
 import { CreateListingDto, CreateCmaDto } from './dto/listings.dto';
 import { Listing } from './listing.entity';
 import type { ChatCompletionResponseMessage } from 'openai';
@@ -10,14 +10,14 @@ import { UserService } from '../user/user.service';
 import { ZillowService } from 'src/zillow/zillow.service';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
 import { Cma } from './types/listings.types';
-import { GoogleService } from 'src/google/google.service';
+import { MapsService } from 'src/maps/maps.service';
 
 @Injectable()
 export class ListingsService {
   constructor(
-    private readonly gptService: GptService,
+    private readonly geminiService: GeminiService,
     private readonly usersService: UserService,
-    private readonly googleService: GoogleService,
+    private readonly googleMapsService: MapsService,
     private readonly zillowService: ZillowService,
     private readonly dataSource: DataSource,
     @InjectRepository(Listing)
@@ -35,19 +35,20 @@ export class ListingsService {
     address,
     keyInfo,
   }: GetPropertyDescriptionDto): Promise<{
-    choices: ChatCompletionResponseMessage[];
+    text: string;
     zillowInfo: ZillowPropertyInfo;
   }> {
     const zillowInfo = await this.zillowService.getPropertyInfo({ address });
     if (zillowInfo) {
-      const gptResponse = await this.gptService.generateDescriptionForListing({
-        address,
-        keyInfo,
-        zillowInfo,
-      });
-      if (gptResponse.choices.length > 0) {
+      const geminiResponse =
+        await this.geminiService.generateDescriptionForListing({
+          address,
+          keyInfo,
+          zillowInfo,
+        });
+      if (geminiResponse) {
         return {
-          choices: gptResponse.choices.map((content) => content.message),
+          text: geminiResponse,
           zillowInfo,
         };
       }
@@ -145,7 +146,6 @@ export class ListingsService {
     let averagePricePerSquareFoot = 0;
     let averagePricePerSquareFootDataLength = 0;
     let averageSquareFoot = 0;
-    const averageSquareFootDataLength = 0;
     for (const item of data) {
       if (item?.price) {
         averagePriceDataLength++;
@@ -175,6 +175,8 @@ export class ListingsService {
     const listing = await this.listingRepo.findOneBy({
       zpid: dto.zpid,
     });
+
+    console.log('price', dto.price);
     const user = await this.usersService.findOne('id', dto.userId);
     if (listing) {
       return listing;
@@ -184,7 +186,7 @@ export class ListingsService {
       );
 
       const pointsOfInterestData =
-        await this.googleService.getNearbyPointsOfInterest({
+        await this.googleMapsService.getNearbyPointsOfInterest({
           latitude: dto.latitude,
           longitude: dto.longitude,
         });
@@ -197,7 +199,7 @@ export class ListingsService {
         ...dto,
         nearbyPoi: JSON.parse(JSON.stringify(pointsOfInterestData)),
         propertyInsightAvgFt: propertyInsightData.avgSqFt,
-        propertyInsightAvgPrice: propertyInsightData.avgPrice,
+        propertyInsightAvgPrice: 150,
         user,
       });
 

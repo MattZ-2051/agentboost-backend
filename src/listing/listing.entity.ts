@@ -20,6 +20,12 @@ export class Listing {
   price: number;
 
   @Column({ nullable: true, type: 'float' })
+  latitude: number;
+
+  @Column({ nullable: true, type: 'float' })
+  longitude: number;
+
+  @Column({ nullable: true, type: 'float' })
   pricePerFoot: number;
 
   @Column({ nullable: true, type: 'varchar' })

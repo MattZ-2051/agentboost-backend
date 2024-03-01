@@ -1,17 +1,11 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { HttpException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gmc } from './gmc.entity';
 import { DataSource, Repository } from 'typeorm';
 import { AddToCalenderDto, CreateGmcDto } from './dto/gmc.dto';
 import { ListingsService } from 'src/listing/listing.service';
-import { GptService } from 'src/gpt/gpt.service';
 import { Listing } from 'src/listing/listing.entity';
+import { GeminiService } from 'src/gemini/gemini.service';
 
 @Injectable()
 export class GmcService {
@@ -20,7 +14,7 @@ export class GmcService {
     private readonly dataSource: DataSource,
     @Inject(forwardRef(() => ListingsService))
     private readonly listingsService: ListingsService,
-    private readonly gptService: GptService,
+    private readonly geminiService: GeminiService,
   ) {}
 
   async addGmcToCalender(dto: AddToCalenderDto): Promise<Listing> {
@@ -87,7 +81,7 @@ export class GmcService {
 
     if (listing?.gmcs?.length === 0) {
       delete dto.listingId;
-      const gmcData = await this.gptService.generateGmcForListing(dto);
+      const gmcData = await this.geminiService.generateGmcForListing(dto);
       const createdGmc: Gmc[] = [];
 
       if (gmcData.firstCaption) {

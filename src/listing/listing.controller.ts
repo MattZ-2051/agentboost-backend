@@ -16,7 +16,7 @@ export class ListingsController {
   async generateListingPropertyDescription(
     @Body() body: GetPropertyDescriptionDto,
   ): Promise<{
-    choices: ChatCompletionResponseMessage[];
+    text: string;
     zillowInfo: ZillowPropertyInfo;
   }> {
     const address = body.address;
@@ -43,7 +43,7 @@ export class ListingsController {
     );
   }
 
-  // @UseGuards(AtGuard)
+  @UseGuards(AtGuard)
   @Post('/create')
   async createListing(
     @Body() createListingDto: CreateListingDto,

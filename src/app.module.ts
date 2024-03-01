@@ -16,12 +16,12 @@ import { ZillowModule } from './zillow/zillow.module';
 import { BuyerController } from './buyer/buyer.controller';
 import { BuyerService } from './buyer/buyer.service';
 import { BuyerModule } from './buyer/buyer.module';
-import { GoogleController } from './google/google.controller';
-import { GoogleService } from './google/google.service';
-import { GoogleModule } from './google/google.module';
 import { FacebookService } from './facebook/facebook.service';
 import { FacebookModule } from './facebook/facebook.module';
 import { CampaignModule } from './campaign/campaign.module';
+import { GoogleStorageModule } from './google-storage/google-storage.module';
+import { GeminiModule } from './gemini/gemini.module';
+import { MapsModule } from './maps/maps.module';
 
 @Module({
   imports: [
@@ -48,22 +48,13 @@ import { CampaignModule } from './campaign/campaign.module';
     ListingsModule,
     ZillowModule,
     BuyerModule,
-    GoogleModule,
     FacebookModule,
     CampaignModule,
+    GoogleStorageModule,
+    GeminiModule,
+    MapsModule,
   ],
-  providers: [
-    AppService,
-    ZillowService,
-    BuyerService,
-    GoogleService,
-    FacebookService,
-  ],
-  controllers: [
-    AppController,
-    ZillowController,
-    BuyerController,
-    GoogleController,
-  ],
+  providers: [AppService, ZillowService, BuyerService, FacebookService],
+  controllers: [AppController, ZillowController, BuyerController],
 })
 export class AppModule {}

@@ -36,6 +36,8 @@ export class ZillowService {
 
       const { data } = response;
       const zillowInfo: ZillowPropertyInfo = {
+        latitude: data.latitude,
+        longitude: data.longitude,
         zpid: data.zpid,
         imgSrc: data.imgSrc,
         zestimate: data.zestimate,
