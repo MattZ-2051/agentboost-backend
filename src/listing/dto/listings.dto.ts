@@ -42,8 +42,8 @@ export class CreateListingDto {
   propertyType: string;
 
   @IsNotEmpty()
-  @IsString()
-  squareFt: string;
+  @IsNumber()
+  squareFt: number;
 
   @IsNotEmpty()
   @IsString()

@@ -28,8 +28,8 @@ export class Listing {
   @Column({ nullable: false, type: 'varchar' })
   imgSrc: string;
 
-  @Column({ nullable: false, type: 'varchar' })
-  squareFt: string;
+  @Column({ nullable: false, type: 'int' })
+  squareFt: number;
 
   @Column({ nullable: false, type: 'varchar' })
   city: string;

@@ -11,6 +11,12 @@ export class ZillowService {
     private readonly httpService: HttpService,
   ) {}
 
+  private _convertSquareFtStringToNum(squareFt: string): number {
+    const num = squareFt.split(' ')[0].split(',').join('');
+    const squareFtNum = parseInt(num, 10);
+    return squareFtNum;
+  }
+
   /**
    * function that handles getting property info from zillow api for listings
    * @param dto - dto object containing address to be sent to zillow api
@@ -35,7 +41,7 @@ export class ZillowService {
       );
 
       const { data } = response;
-      const zillowInfo: ZillowPropertyInfo = {
+      const zillowInfo: any = {
         yearBuilt: data.yearBuilt,
         latitude: data.latitude,
         longitude: data.longitude,
@@ -54,9 +60,9 @@ export class ZillowService {
         price: data.price,
         bedrooms: data.bedrooms,
         bathrooms: data.bathrooms,
+        squareFt: this._convertSquareFtStringToNum(data.resoFacts.livingArea),
         resoFacts: {
           lotSize: data.resoFacts.lotSize,
-          livingArea: data.resoFacts.livingArea,
         },
       };
       return zillowInfo;

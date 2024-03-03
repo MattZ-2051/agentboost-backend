@@ -1,8 +1,15 @@
-import { Controller, Get, UseGuards, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Post,
+  Body,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ListingsService } from './listing.service';
 import { AtGuard } from '../auth/guards/auth.jwt-auth.guard';
 import { CreateCmaDto, GetPropertyDescriptionDto } from './dto/listings.dto';
-import type { ChatCompletionResponseMessage } from 'openai';
 import { CreateListingDto } from './dto/listings.dto';
 import { Listing } from './listing.entity';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
@@ -27,6 +34,12 @@ export class ListingsController {
     });
 
     return data;
+  }
+
+  @UseGuards(AtGuard)
+  @Delete('/delete/:id')
+  async deleteListing(@Param() params: { id: string }): Promise<any> {
+    return await this.listingsService.deleteListing(params.id);
   }
 
   @UseGuards(AtGuard)

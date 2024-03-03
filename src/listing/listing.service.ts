@@ -5,7 +5,6 @@ import { GetPropertyDescriptionDto } from './dto/listings.dto';
 import { GeminiService } from 'src/gemini/gemini.service';
 import { CreateListingDto, CreateCmaDto } from './dto/listings.dto';
 import { Listing } from './listing.entity';
-import type { ChatCompletionResponseMessage } from 'openai';
 import { UserService } from '../user/user.service';
 import { ZillowService } from 'src/zillow/zillow.service';
 import { ZillowPropertyInfo } from 'src/zillow/types/zillow.types';
@@ -24,6 +23,23 @@ export class ListingsService {
     private readonly listingRepo: Repository<Listing>,
   ) {}
 
+  async deleteListing(listingId: string): Promise<void> {
+    const listing = await this.listingRepo.delete(listingId);
+    // const queryRunner = this.dataSource.createQueryRunner();
+    //   await queryRunner.startTransaction();
+    //   try {
+    //     await queryRunner.manager.save(newListing);
+    //     await queryRunner.commitTransaction();
+    //     return newListing;
+    //   } catch (err) {
+    //     console.log('error creating listing', err);
+    //     // since we have errors lets rollback the changes we made
+    //     await queryRunner.rollbackTransaction();
+    //   } finally {
+    //     // you need to release a queryRunner which was manually instantiated
+    //     await queryRunner.release();
+    //   }
+  }
   /**
    *
    * @param {address} - address of property from frontend formatted in address, city, state
@@ -172,6 +188,7 @@ export class ListingsService {
       avgSqFt: averageSquareFoot,
     };
   }
+
   async createListing(dto: CreateListingDto): Promise<Listing> {
     const listing = await this.listingRepo.findOneBy({
       zpid: dto.zpid,
