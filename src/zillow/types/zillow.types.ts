@@ -16,6 +16,7 @@ export type ZillowPropertyInfo = {
   bathrooms: number;
   longitude: number;
   latitude: number;
+  yearBuilt: number;
   resoFacts: {
     lotSize: string;
     livingArea: string;

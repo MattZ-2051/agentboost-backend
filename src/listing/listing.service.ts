@@ -39,6 +39,7 @@ export class ListingsService {
     zillowInfo: ZillowPropertyInfo;
   }> {
     const zillowInfo = await this.zillowService.getPropertyInfo({ address });
+
     if (zillowInfo) {
       const geminiResponse =
         await this.geminiService.generateDescriptionForListing({
@@ -176,7 +177,6 @@ export class ListingsService {
       zpid: dto.zpid,
     });
 
-    console.log('price', dto.price);
     const user = await this.usersService.findOne('id', dto.userId);
     if (listing) {
       return listing;

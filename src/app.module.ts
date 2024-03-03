@@ -7,7 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
-import { GptModule } from './gpt/gpt.module';
 import { ListingsModule } from './listing/listing.module';
 import { GmcModule } from './gmc/gmc.module';
 import { ZillowService } from './zillow/zillow.service';
@@ -42,7 +41,6 @@ import { MapsModule } from './maps/maps.module';
     UserModule,
     AuthModule,
     PassportModule,
-    GptModule,
     HttpModule,
     GmcModule,
     ListingsModule,

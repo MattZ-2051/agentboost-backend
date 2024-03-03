@@ -1,4 +1,4 @@
-import { IsNumber, IsNotEmpty, IsString, IsJSON } from 'class-validator';
+import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
 
 export class GetPropertyDescriptionDto {
   @IsNotEmpty()
@@ -32,12 +32,6 @@ export class CreateListingDto {
   @IsNotEmpty()
   @IsNumber()
   price: number;
-
-  @IsNumber()
-  pricePerFoot: number;
-
-  @IsString()
-  associationFees: string;
 
   @IsNotEmpty()
   @IsString()
@@ -91,13 +85,24 @@ export class CreateListingDto {
   @IsNumber()
   yearBuilt: number;
 
+  @IsNotEmpty()
+  @IsNumber()
+  propertyInsightAvgFt: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  propertyInsightAvgPrice: number;
+
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
   @IsString()
   subdivision: string;
 
   @IsString()
   county: string;
 
-  @IsNotEmpty()
   @IsString()
-  userId: string;
+  neighberhood: string;
 }

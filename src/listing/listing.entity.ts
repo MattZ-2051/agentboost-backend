@@ -19,23 +19,14 @@ export class Listing {
   @Column({ nullable: false, type: 'int' })
   price: number;
 
-  @Column({ nullable: true, type: 'float' })
+  @Column({ nullable: false, type: 'float' })
   latitude: number;
 
-  @Column({ nullable: true, type: 'float' })
+  @Column({ nullable: false, type: 'float' })
   longitude: number;
-
-  @Column({ nullable: true, type: 'float' })
-  pricePerFoot: number;
-
-  @Column({ nullable: true, type: 'varchar' })
-  associationFees: string;
 
   @Column({ nullable: false, type: 'varchar' })
   imgSrc: string;
-
-  @Column({ nullable: false, type: 'varchar' })
-  propertyType: string;
 
   @Column({ nullable: false, type: 'varchar' })
   squareFt: string;
@@ -79,14 +70,14 @@ export class Listing {
   @Column({ nullable: false, type: 'int' })
   yearBuilt: number;
 
-  @Column({ nullable: true, type: 'float', default: null })
-  garageCount: number;
-
   @Column({ nullable: true, type: 'varchar', default: null })
   county: string;
 
   @Column({ nullable: true, type: 'varchar', default: null })
   subdivision: string;
+
+  @Column({ nullable: true, type: 'varchar', default: null })
+  neighberhood: string;
 
   @Column({ nullable: true, default: null, type: 'jsonb' })
   cma: JSON;
