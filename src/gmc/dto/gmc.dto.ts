@@ -15,27 +15,43 @@ export class CreateGmcDto {
   @IsNotEmpty()
   address: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  bed;
+  brandingDescripton: string;
 
   @IsNumber()
   @IsNotEmpty()
-  bath;
+  bed: number;
 
   @IsNumber()
   @IsNotEmpty()
-  squareFt;
+  bath: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  squareFt: number;
 
   @IsString()
   @IsNotEmpty()
-  propertyDescription;
+  propertyDescription: string;
 
   @IsNumber()
   @IsNotEmpty()
-  listingId;
+  listingId: number;
 
   @IsString()
   @IsNotEmpty()
-  location;
+  location: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fullName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
 }

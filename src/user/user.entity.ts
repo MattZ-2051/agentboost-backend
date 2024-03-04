@@ -25,6 +25,9 @@ export class User {
   brandDescription: string;
 
   @Column({ nullable: true, type: 'text', default: '' })
+  phoneNumber: string;
+
+  @Column({ nullable: true, type: 'text', default: '' })
   brokerage: string;
 
   @Column({ nullable: true, type: 'varchar', default: '' })
@@ -50,10 +53,10 @@ export class User {
   @OneToMany(() => Listing, (listing) => listing.user, { nullable: true })
   listings: Listing[];
 
-  @OneToMany(() => Listing, (listing) => listing.user, { nullable: true })
+  @OneToMany(() => Buyer, (buyer) => buyer.user, { nullable: true })
   buyers: Buyer[];
 
-  @OneToMany(() => Listing, (listing) => listing.user, { nullable: true })
+  @OneToMany(() => Campaign, (campaign) => campaign.user, { nullable: true })
   campaigns: Campaign[];
 
   constructor(partial: Partial<User>) {

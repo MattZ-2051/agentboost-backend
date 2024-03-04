@@ -15,6 +15,6 @@ export class Gmc {
   @Column({ nullable: true, type: 'varchar' })
   calenderDate: string;
 
-  @ManyToOne(() => Listing, (listing) => listing.gmcs)
+  @ManyToOne(() => Listing, (listing) => listing.gmcs, { onDelete: 'CASCADE' })
   listing: Listing;
 }

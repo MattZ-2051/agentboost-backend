@@ -85,6 +85,9 @@ export class Listing {
   @ManyToOne(() => User, (user) => user.listings, { nullable: false })
   user: User;
 
-  @OneToMany(() => Gmc, (gmc) => gmc.listing, { nullable: true })
+  @OneToMany(() => Gmc, (gmc) => gmc.listing, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   gmcs: Gmc[];
 }

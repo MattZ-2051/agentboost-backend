@@ -44,6 +44,10 @@ export class GenerateListingGmcDto {
   @IsNotEmpty()
   address: string;
 
+  @IsString()
+  @IsNotEmpty()
+  brandingDescripton: string;
+
   @IsNumber()
   @IsNotEmpty()
   bed;
@@ -63,4 +67,16 @@ export class GenerateListingGmcDto {
   @IsString()
   @IsNotEmpty()
   location;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fullName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
 }

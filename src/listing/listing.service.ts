@@ -24,21 +24,7 @@ export class ListingsService {
   ) {}
 
   async deleteListing(listingId: string): Promise<void> {
-    const listing = await this.listingRepo.delete(listingId);
-    // const queryRunner = this.dataSource.createQueryRunner();
-    //   await queryRunner.startTransaction();
-    //   try {
-    //     await queryRunner.manager.save(newListing);
-    //     await queryRunner.commitTransaction();
-    //     return newListing;
-    //   } catch (err) {
-    //     console.log('error creating listing', err);
-    //     // since we have errors lets rollback the changes we made
-    //     await queryRunner.rollbackTransaction();
-    //   } finally {
-    //     // you need to release a queryRunner which was manually instantiated
-    //     await queryRunner.release();
-    //   }
+    await this.listingRepo.delete(listingId);
   }
   /**
    *

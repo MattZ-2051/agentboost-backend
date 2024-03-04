@@ -86,18 +86,15 @@ export const generateListingGmc = ({
   location,
   propertyDescription,
   squareFt,
-}: GenerateListingGmcDto): { prompt1: string; prompt2: string } => {
-  return {
-    prompt1: `
-  Act as a realtor writing a social media caption for a new listing located at ${address}.
-  This house is a ${bed} ${bath} ${squareFt} and is described as ${propertyDescription}.
-  Include 10 optimized hashtags for selling real estate in ${location}
-  `,
-    prompt2: `
-    Act as a realtor writing a social media caption for a home located at ${address}.
-    This house is a ${bed} ${bath} ${squareFt} and is described as ${propertyDescription}.
-    Write 5 captions and each of these captions focus on a different unique feature of the home.
-    For each post, include 10 optimized hashtags for selling real estate in ${location}.
-  `,
-  };
+  brandingDescripton,
+  email,
+  fullName,
+  phoneNumber,
+}: GenerateListingGmcDto): string => {
+  return `Act as a realtor who is described as ${brandingDescripton} writing a social media caption for a home located at ${address}.
+  This house is a ${bed} bedroom, ${bath} bathroom, ${squareFt} square ft and is described as ${propertyDescription}.
+  Write 5 captions, and have each of these captions focus on a different unique feature of the home.
+  For each post, include 10 optimized hashtags for selling real estate in ${location}.
+  Include call to action on every caption with the agents name ${fullName}, email ${email} and phone number ${phoneNumber} at the end of each single caption.
+  Separate the name, phone number, and email onto separate lines. Label each caption with a number (example #1, #2, etc...) and do not include any other text.`;
 };

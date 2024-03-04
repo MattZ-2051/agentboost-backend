@@ -5,6 +5,7 @@ import { GeneratePropertyDescriptionDto } from './dto/gemini.dto';
 import { GeneratePropertyInsightDto } from './dto/gemini.dto';
 import { GenerateListingGmcDto } from './dto/gemini.dto';
 import {
+  generateListingGmc,
   generateListingPropertyInsightPrompt,
   generateListingProperyDescriptionPrompt,
 } from './prompts';
@@ -38,32 +39,6 @@ export class GeminiService {
     const text = response.text();
     return text;
   }
-  // async generateDescriptionForListing({
-  //   address,
-  //   keyInfo,
-  //   zillowInfo,
-  // }: GeneratePropertyDescriptionDto) {
-  //   // const configuration = new Configuration({
-  //   //   apiKey: this.configService.get<string>('GPT_API_KEY'),
-  //   // });
-  //   // const openai = new OpenAIApi(configuration);
-  //   // const content = generateListingProperyDescriptionPrompt({
-  //   //   zillowInfo,
-  //   //   propertyAddress: address,
-  //   //   keyInfo,
-  //   //   brandDescription: '',
-  //   // });
-  //   try {
-  //     const response = await openai.createChatCompletion({
-  //       model: 'gpt-3.5-turbo',
-  //       messages: [{ role: 'user', content }],
-  //     });
-  //     return response.data;
-  //   } catch (err) {
-  //     console.log('gpt error', err.response);
-  //     throw new HttpException('error with ai', 500);
-  //   }
-  // }
 
   // async generatePropertyInsightForListing(dto: GeneratePropertyInsightDto) {
   //   // const configuration = new Configuration({
@@ -86,11 +61,21 @@ export class GeminiService {
   async generateGmcForListing(
     dto: GenerateListingGmcDto,
   ): Promise<{ firstCaption: string; otherCaptions: string[] }> {
+    const prompt = generateListingGmc({ ...dto });
+    const model = this.genAi.getGenerativeModel({ model: 'gemini-1.0-pro' });
     try {
-      return { firstCaption: '', otherCaptions: [] };
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      const data = parseGmcResults(text);
+
+      return {
+        firstCaption: data.firstCaption,
+        otherCaptions: data.otherCaptions,
+      };
     } catch (err) {
-      console.log('gpt error', err);
-      throw new HttpException('error with ai', 500);
+      console.log('gemini error', err);
+      throw new HttpException('error with gemini ai', 500);
     }
   }
 }

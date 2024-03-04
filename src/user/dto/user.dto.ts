@@ -29,6 +29,9 @@ export class UpdateUserDto {
   fullName?: string;
 
   @IsString()
+  phoneNumber?: string;
+
+  @IsString()
   brokerage?: string;
 }
 
