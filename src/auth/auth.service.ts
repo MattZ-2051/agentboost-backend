@@ -118,10 +118,11 @@ export class AuthService {
 
     const { user } = req;
 
+    const redirectUrl = this.configService.get('GOOGLE_FRONTEND_REDIRECT_URL');
     const googleUser = user as GoogleUser;
     await this.googleLogin(googleUser);
     return {
-      url: `http://localhost:3000/google-oauth-success-redirect${req.url}&user-email=${googleUser.email}`,
+      url: `${redirectUrl}/google-oauth-success-redirect${req.url}&user-email=${googleUser.email}`,
     };
   }
 

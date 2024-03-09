@@ -10,7 +10,7 @@ import { File } from './types';
 export class GoogleStorageService {
   constructor(private readonly configService: ConfigService) {
     this.storage = new Storage({
-      keyFilename: 'src/google/storage/key.json',
+      keyFilename: 'src/google-storage/key.json',
     });
     this.bucket = this.storage.bucket('agentboost-dev');
   }
