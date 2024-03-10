@@ -1,5 +1,5 @@
 import { Injectable, HttpException } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetPropertyDescriptionDto } from './dto/listings.dto';
 import { GeminiService } from 'src/gemini/gemini.service';
@@ -23,8 +23,8 @@ export class ListingsService {
     private readonly listingRepo: Repository<Listing>,
   ) {}
 
-  async deleteListing(listingId: string): Promise<void> {
-    await this.listingRepo.delete(listingId);
+  async deleteListing(listingId: string): Promise<DeleteResult> {
+    return await this.listingRepo.delete(listingId);
   }
   /**
    *
@@ -36,24 +36,34 @@ export class ListingsService {
   async getPropertyDescription({
     address,
     keyInfo,
+    city,
+    state,
   }: GetPropertyDescriptionDto): Promise<{
     text: string;
     zillowInfo: ZillowPropertyInfo;
   }> {
-    const zillowInfo = await this.zillowService.getPropertyInfo({ address });
+    const zillowInfo = await this.zillowService.getPropertyInfo({
+      address,
+      city,
+      state,
+    });
 
     if (zillowInfo) {
-      const geminiResponse =
-        await this.geminiService.generateDescriptionForListing({
-          address,
-          keyInfo,
-          zillowInfo,
-        });
-      if (geminiResponse) {
-        return {
-          text: geminiResponse,
-          zillowInfo,
-        };
+      try {
+        const geminiResponse =
+          await this.geminiService.generateDescriptionForListing({
+            address,
+            keyInfo,
+            zillowInfo,
+          });
+        if (geminiResponse) {
+          return {
+            text: geminiResponse,
+            zillowInfo,
+          };
+        }
+      } catch (err) {
+        console.log('error', err);
       }
     }
   }

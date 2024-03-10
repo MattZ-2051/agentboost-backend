@@ -79,7 +79,7 @@ export const generateListingPropertyInsightPrompt = ({
   return prompt;
 };
 
-export const generateListingGmc = ({
+export const generateListingGmcPrompt = ({
   address,
   bed,
   bath,

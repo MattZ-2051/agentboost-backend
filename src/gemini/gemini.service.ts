@@ -5,7 +5,7 @@ import { GeneratePropertyDescriptionDto } from './dto/gemini.dto';
 import { GeneratePropertyInsightDto } from './dto/gemini.dto';
 import { GenerateListingGmcDto } from './dto/gemini.dto';
 import {
-  generateListingGmc,
+  generateListingGmcPrompt,
   generateListingPropertyInsightPrompt,
   generateListingProperyDescriptionPrompt,
 } from './prompts';
@@ -61,7 +61,7 @@ export class GeminiService {
   async generateGmcForListing(
     dto: GenerateListingGmcDto,
   ): Promise<{ firstCaption: string; otherCaptions: string[] }> {
-    const prompt = generateListingGmc({ ...dto });
+    const prompt = generateListingGmcPrompt({ ...dto });
     const model = this.genAi.getGenerativeModel({ model: 'gemini-1.0-pro' });
     try {
       const result = await model.generateContent(prompt);

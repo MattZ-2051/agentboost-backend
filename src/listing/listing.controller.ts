@@ -26,11 +26,12 @@ export class ListingsController {
     text: string;
     zillowInfo: ZillowPropertyInfo;
   }> {
-    const address = body.address;
-    const keyInfo = body.keyInfo;
+    const { address, keyInfo, city, state } = body;
     const data = await this.listingsService.getPropertyDescription({
       address,
       keyInfo,
+      city,
+      state,
     });
 
     return data;

@@ -8,6 +8,14 @@ export class GetPropertyDescriptionDto {
   @IsNotEmpty()
   @IsString()
   keyInfo: string;
+
+  @IsNotEmpty()
+  @IsString()
+  state: string;
+
+  @IsNotEmpty()
+  @IsString()
+  city: string;
 }
 
 export class CreateCmaDto {

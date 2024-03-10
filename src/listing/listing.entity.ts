@@ -73,6 +73,9 @@ export class Listing {
   @Column({ nullable: true, type: 'varchar', default: null })
   county: string;
 
+  @Column({ nullable: true, type: 'varchar', default: 'Upcoming' })
+  status: string;
+
   @Column({ nullable: true, type: 'varchar', default: null })
   subdivision: string;
 

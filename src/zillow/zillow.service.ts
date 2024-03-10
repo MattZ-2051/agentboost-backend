@@ -26,12 +26,14 @@ export class ZillowService {
     const apiKey = this.configService.get<string>('ZILLOW_API_KEY');
     const apiUrl = this.configService.get<string>('ZILLOW_API_HOST');
 
+    const address = `${dto.address}, ${dto.city}, ${dto.state}`;
+
     try {
       const response = await this.httpService.axiosRef.get<ZillowPropertyInfo>(
         `${apiUrl}/property`,
         {
           params: {
-            address: dto.address,
+            address,
           },
           headers: {
             'X-RapidAPI-Key': apiKey,

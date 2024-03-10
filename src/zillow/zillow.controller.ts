@@ -13,6 +13,7 @@ export class ZillowController {
     @Param() params: { address: string },
   ): Promise<ZillowPropertyInfo> {
     const address = params.address;
+
     return await this.zillowService.getPropertyInfo({ address });
   }
 
