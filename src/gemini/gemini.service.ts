@@ -14,12 +14,13 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 @Injectable()
 export class GeminiService {
-  #apiKey: string;
-  genAi: GoogleGenerativeAI;
   constructor(private readonly configService: ConfigService) {
-    this.#apiKey = this.configService.get('GOOGLE_GEMINI_API_KEY');
-    this.genAi = new GoogleGenerativeAI(this.#apiKey);
+    this.apiKey = this.configService.get('GOOGLE_GEMINI_API_KEY');
+    this.genAi = new GoogleGenerativeAI(this.apiKey);
   }
+
+  private genAi: GoogleGenerativeAI;
+  private apiKey: string;
 
   async generateDescriptionForListing({
     address,

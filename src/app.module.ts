@@ -21,6 +21,9 @@ import { CampaignModule } from './campaign/campaign.module';
 import { GoogleStorageModule } from './google-storage/google-storage.module';
 import { GeminiModule } from './gemini/gemini.module';
 import { MapsModule } from './maps/maps.module';
+import { TwitterController } from './twitter/twitter.controller';
+import { TwitterService } from './twitter/twitter.service';
+import { TwitterModule } from './twitter/twitter.module';
 
 @Module({
   imports: [
@@ -51,8 +54,9 @@ import { MapsModule } from './maps/maps.module';
     GoogleStorageModule,
     GeminiModule,
     MapsModule,
+    TwitterModule,
   ],
-  providers: [AppService, ZillowService, BuyerService, FacebookService],
-  controllers: [AppController, ZillowController, BuyerController],
+  providers: [AppService, ZillowService, BuyerService, FacebookService, TwitterService],
+  controllers: [AppController, ZillowController, BuyerController, TwitterController],
 })
 export class AppModule {}
