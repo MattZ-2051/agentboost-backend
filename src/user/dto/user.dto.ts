@@ -1,5 +1,19 @@
 import { Exclude } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
+export class AddSocialAccountDto {
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+  @IsNotEmpty()
+  @IsString()
+  socialId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  social: 'facebook' | 'x' | 'instagram';
+}
 
 export class GetUserDto {
   id: number;
@@ -28,6 +42,8 @@ export class GetUserDto {
 }
 
 export class UpdateUserDto {
+  @IsNumber()
+  @IsNotEmpty()
   id: number;
 
   @IsString()
@@ -36,6 +52,7 @@ export class UpdateUserDto {
   @IsString()
   profileImg?: string;
 
+  @IsString()
   businessLogo?: string;
 
   @IsString()

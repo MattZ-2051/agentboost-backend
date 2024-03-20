@@ -1,9 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository, UpdateResult } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from 'src/auth/dto/auth.dto';
-import { UpdateUserDto, UpdateUserPasswordDto } from './dto/user.dto';
+import {
+  UpdateUserDto,
+  UpdateUserPasswordDto,
+  AddSocialAccountDto,
+} from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -63,6 +67,7 @@ export class UserService {
     if (!userExists) {
       throw new HttpException('User does not exist', 400);
     }
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
 
@@ -74,6 +79,53 @@ export class UserService {
         await queryRunner.manager.save(newUser);
         await queryRunner.commitTransaction();
         return newUser;
+      } catch (err) {
+        // since we have errors lets rollback the changes we made
+        await queryRunner.rollbackTransaction();
+      } finally {
+        // you need to release a queryRunner which was manually instantiated
+        await queryRunner.release();
+      }
+    } else {
+      throw new HttpException('Error updating user', 500);
+    }
+  }
+
+  async addSocialAccount({
+    id,
+    socialId,
+    social,
+  }: AddSocialAccountDto): Promise<void> {
+    const userExists = await this.userRepo.findOneBy({ id });
+    if (!userExists) {
+      throw new HttpException('User does not exist', 400);
+    }
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+    let user: UpdateResult;
+    if (social === 'x') {
+      user = await this.userRepo.update(
+        { id },
+        { ...userExists, xId: socialId },
+      );
+    } else if (social === 'facebook') {
+      user = await this.userRepo.update(
+        { id },
+        { ...userExists, facebookId: socialId },
+      );
+    } else if (social === 'instagram') {
+      user = await this.userRepo.update(
+        { id },
+        { ...userExists, facebookId: socialId },
+      );
+    }
+
+    if (user.affected === 1) {
+      const newUser = await this.userRepo.findOneBy({ id });
+      try {
+        await queryRunner.manager.save(newUser);
+        await queryRunner.commitTransaction();
+        return;
       } catch (err) {
         // since we have errors lets rollback the changes we made
         await queryRunner.rollbackTransaction();

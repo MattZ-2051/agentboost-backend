@@ -45,7 +45,7 @@ export class User {
   instagramId: string;
 
   @Column({ nullable: true, type: 'varchar', default: '' })
-  xId: boolean;
+  xId: string;
 
   @Column({ nullable: true, type: 'varchar', default: '' })
   facebookId: string;

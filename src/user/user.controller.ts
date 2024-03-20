@@ -11,7 +11,7 @@ import {
 import { AtGuard } from 'src/auth/guards/auth.jwt-auth.guard';
 import { UserService } from './user.service';
 import { User } from './user.entity';
-import { UpdateUserDto } from './dto/user.dto';
+import { AddSocialAccountDto, UpdateUserDto } from './dto/user.dto';
 
 @Controller('users')
 export class UserController {
@@ -29,5 +29,12 @@ export class UserController {
   @Patch('/update')
   async updateUser(@Body() updateUserDto: UpdateUserDto): Promise<User> {
     return await this.userService.updateUser(updateUserDto);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(AtGuard)
+  @Patch('/update/social')
+  async updateUserSoical(@Body() dto: AddSocialAccountDto): Promise<void> {
+    return await this.userService.addSocialAccount(dto);
   }
 }
