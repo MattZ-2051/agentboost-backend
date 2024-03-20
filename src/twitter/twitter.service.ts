@@ -10,4 +10,8 @@ export class TwitterService {
   }
 
   private twitterClient: Client;
+
+  // const getTweets = () => {
+
+  // };
 }

@@ -1,14 +1,27 @@
 import { Exclude } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class GetUserDto {
   id: number;
+
+  @IsString()
   email: string;
+
+  @IsString()
   brandDescription: string;
+
+  @IsString()
   areaOfExpertise: string;
-  instagram: boolean;
-  facebook: boolean;
-  x: boolean;
+
+  @IsString()
+  instagramId: string;
+
+  @IsString()
+  facebookId: string;
+
+  @IsString()
+  xId: string;
+
   @Exclude()
   password;
   rtHash;
